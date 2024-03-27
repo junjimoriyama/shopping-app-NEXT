@@ -1,0 +1,57 @@
+.pagination {
+  display: flex;
+  gap: 10px;
+
+  .wrap {
+    .prevBtn, .nextBtn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #000000;
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: #ffffff;
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+
+    .pageNum {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #000000;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background-color: #ffffff;
+
+      &.isActive {
+        background-color: #333333;
+        color: #ffffff;
+      }
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+  }
+
+
+  .PerPageSelect {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    .displayedNum {
+      font-size: 12px;
+    }
+    select {
+      width: 50px;
+      height: 30px;
+    }
+  }
+}
