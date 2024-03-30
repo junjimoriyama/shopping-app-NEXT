@@ -115,12 +115,13 @@ export const productSlice = createSlice({
             true : false
         }
       })
-    })
+    }),
+    
   }
 })
 
 // reducers
-export const { addToCart, increaseItem, decreaseItem, deleteItem, totalPrice, searchProduct, selectedCategory } = productSlice.actions
+export const { addToCart, increaseItem, decreaseItem, deleteItem, totalPrice, searchProduct, selectedCategory, } = productSlice.actions
 export default productSlice.reducer
 
 // 例えば手打ちでsetEndPageNum(16)と入力したら全ての商品が1ページに表示されるが、ページネーションはsetEndPageNumが4と仮定されたものとし

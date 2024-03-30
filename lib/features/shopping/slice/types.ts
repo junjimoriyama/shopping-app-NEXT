@@ -1,3 +1,5 @@
+
+
 export interface initialState {
   // 静的要素
   productList: {
@@ -13,4 +15,8 @@ export interface initialState {
   // 動的要素
   total: number
   // selectedCategory: string; 
+}
+
+export interface pageInitialState {
+  page: number | string
 }

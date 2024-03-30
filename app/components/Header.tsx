@@ -51,7 +51,7 @@ export const Header = () => {
             {isSearch ? <SearchIcon /> : ''}
           </div>
         </div>
-        <Link href="/cart">
+        <Link href="/cart?selectedCategory=vegetable" >
           <div className="cartIcon">
             <CartIcon />
             {totalAmount > 0 ? (
@@ -63,3 +63,5 @@ export const Header = () => {
     </header>
   );
 };
+
+// jsでクエリパラメーターを取得できる

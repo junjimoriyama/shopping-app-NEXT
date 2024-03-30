@@ -14,6 +14,7 @@ import { PagiNation } from "../components/PagiNation";
 
 // css
 import "../../sass/product.scss";
+import { useSelector } from "react-redux";
 
 const Product = () => {
   // state
@@ -77,8 +78,8 @@ const Product = () => {
     }
   };
 
-  
 
+  // カテゴリー選択
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     // state
     setCategoryValue(e.target.value);
@@ -88,9 +89,9 @@ const Product = () => {
     dispatch(selectedCategory(e.target.value));
 
   // 表示件数とカテゴリーがallなら
-  if (e.target.value === "all" && perView === displayedCount) {
+  if (e.target.value === "all") {
     setEndPageNum(productList.length)
-    setPerView(productList.length)
+    // setPerView(productList.length)
   } else {
     // それ以外の場合は、現在の表示件数へ
     setEndPageNum(perView)
@@ -100,6 +101,7 @@ const Product = () => {
     // 現在のページを初期化
     setActivePage(1)
   };
+  
 
 
   return (
@@ -178,59 +180,7 @@ const Product = () => {
 
 export default Product;
 
-// const perView = 2;
-//   const displayedItemsCount = productList.filter(
-//     (item) => item.display === true
-//   ).length;
-//   const totalPage: number = Math.ceil(displayedItemsCount / perView);
-
-//   const [startCount, setStartCount] = useState(0);
-//   const [endCount, setEndCount] = useState(perView);
-
-//   const Pagination = (j: number) => {
-//     setStartCount(j * perView)
-//     setEndCount(j * perView + perView)
-//   }
-
-//   const prevPagination = () => {
-
-//     if(startCount > 0 ) {
-//       setStartCount(startCount - perView)
-//       setEndCount(endCount - perView)
-//     }
-//   }
-
-//   const nextPagination = () => {
-//     if(endCount < displayedItemsCount) {
-//       setStartCount(startCount + perView)
-//       setEndCount(endCount + perView)
-//     }
-//   }
-
-{
-  /* <div className="pagination">
-        <ul className="pageList"></ul> 
-      </div> */
-}
-
-{
-  /* <ul className="pageList">
-          <div 
-          className="prevBtn"
-          onClick={() => prevPagination()}
-          >◀︎</div>
-          { Array.from({ length: totalPage }, (_, i) => i + 1).map((page, j) => {
-            return <li
-            key={j}
-            className={`pageItem item${j + 1}`}
-            onClick={() => Pagination(j)}
-            >
-              {page}
-              </li>
-          })}
-          <div 
-          className="nextBtn"
-          onClick={() => nextPagination()}
-          >▶︎</div>
-        </ul> */
-}
+// ページネーションstateはカテゴリーが変わったタイミングで更新
+// ページネーションstate:　ページ数、現在のページ、現在のページ更新関数
+// 全件数などはページ数で渡す
+// 
