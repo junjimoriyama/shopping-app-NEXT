@@ -1,7 +1,19 @@
+@import "var";
+
 .product {
   background-color: #ffffff;
   color: #333333;
   padding: 20px;
+  margin-top: $header-margin;
+
+  .totalPrice {
+    text-align: right;
+    background-color: #cd5c5c;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 10px;
+    // width: 200px;
+  }
 
   .wrap {
     display: flex;
@@ -33,6 +45,18 @@
       padding: 5px;
       border-radius: 5px;
       box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, .4);
+      transition: .5s;
+
+      &.isAnimate {
+        animation: sinkButton .5s forwards;
+      }
+      @keyframes sinkButton {
+        0% {
+          box-shadow: 7px 7px 3px 0 rgba(0, 0, 0, .4);
+        } 100% {
+          box-shadow: none;
+        }
+      }
 
       .image {
         width: 100px;
@@ -65,6 +89,20 @@
     }
 
     .addToCartBtn {
+      background-color: #333333;
+      color: #ffffff;
+      border-radius: 5px;
+      padding: 5px;
+      cursor: pointer;
+      text-align: center;
+      transition: .3s;
+      background-color: goldenrod;
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+    .detailBtn {
       background-color: #333333;
       color: #ffffff;
       border-radius: 5px;

@@ -2,6 +2,7 @@
 import { use, useState } from "react";
 import "../../sass/pagination.scss";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { selectedNumber } from "@/lib/features/shopping/slice/PageSlice";
 // import { selectedNumber } from "@/lib/features/shopping/slice/ProductSlice";
 
 interface PageNationProps {
@@ -33,7 +34,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
   const { productList, total } = useAppSelector((state) => state.product);
 
   // ページ数の計算
-  const [ totalPage, setTotalPage  ] = useState(Math.ceil(productList.length / perView) )
+  const totalPage = Math.ceil(displayedCount / perView) 
 
   const dispatch = useAppDispatch();
 
@@ -70,6 +71,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
           name=""
           id=""
           onChange={(e) => {
+            dispatch(selectedNumber(e.target.value))
             const selectedValue = e.target.value;
             if (selectedValue === "all") {
               // 全ての商品表示
@@ -80,7 +82,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
                 setEndPageNum(displayedCount);
               // アクティブページを1に戻す
               setActivePage(1);
-              setTotalPage(1)
+              // setTotalPage(1)
             } else {
               // 選ばれた件数
               const newPer = Number(e.target.value);
@@ -92,7 +94,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
               setEndPageNum(newPer);
               // アクティブページを1に戻す
               setActivePage(1);
-              setTotalPage( displayedCount / newPer)
+              // setTotalPage( displayedCount / newPer)
             }
           }}
         >

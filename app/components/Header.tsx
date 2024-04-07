@@ -1,19 +1,20 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-// import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+// import { UserButton } from "./auth/UserButton";
+
 import "@/sass/header.scss";
 
 import { CartIcon, SearchIcon } from "@/public/icons/HeroIcons";
 import { searchProduct } from "@/lib/features/shopping/slice/ProductSlice";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const Header = () => {
-  const { productList } = useAppSelector((state) => state.product)
+  const { productList, selectedImg, selectedCategoryValue, clickCount, searchWord } = useAppSelector((state) => state.product);
 
   // 検索アイコンの有無
-  const [ isSearch, setIsSearch  ] = useState(true)
+  const [isSearchIcon, setIsSearchIcon] = useState(true);
 
   const dispatch = useAppDispatch();
 
@@ -24,14 +25,31 @@ export const Header = () => {
     totalAmount += item.amount;
   });
 
+  // カートに入れる画像
+  const [addCartImg, setAddCartImg] = useState("");
+  // カートに入れる画像のアニメーション発火
+  const [isVisible, setIsVisible] = useState(false);
+  // 検索文字
+  // const [searchWord, setSearchWord] = useState("");
+  // 
+
+
+  useEffect(() => {
+    // setClickCount(clickCount + 1)
+    setAddCartImg(selectedImg);
+    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [selectedImg, clickCount]);
+
   const inputSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 検索ボックスのアイコン表示非表示
-    if(e.target.value.length > 0) {
-      setIsSearch(false)
-    } else {
-      setIsSearch(true)
-    }
+    setIsSearchIcon(e.target.value.length === 0);
+    // 検索文字に当てはまる商品表示
     dispatch(searchProduct(e.target.value));
+    // setSearchWord(e.target.value)
   };
 
   return (
@@ -45,23 +63,29 @@ export const Header = () => {
           <input
             type="text"
             className="searchBox"
+            value={searchWord}
             onChange={(e) => inputSearchValue(e)}
           />
-          <div className="searchBtn">
-            {isSearch ? <SearchIcon /> : ''}
-          </div>
+          <div className="searchBtn">{isSearchIcon ? <SearchIcon /> : ""}</div>
         </div>
-        <Link href="/cart?selectedCategory=vegetable" >
+        <Link href="/cart">
           <div className="cartIcon">
             <CartIcon />
             {totalAmount > 0 ? (
               <div className="totalAmount">{totalAmount}</div>
             ) : null}
+            {addCartImg && (
+              <img
+                className={`addCartImg ${isVisible ? "animate" : ""}`}
+                src={`images/${addCartImg}`}
+                alt=""
+              />
+            )}
           </div>
         </Link>
       </div>
+
+      {/* <UserButton/> */}
     </header>
   );
 };
-
-// jsでクエリパラメーターを取得できる

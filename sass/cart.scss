@@ -1,12 +1,20 @@
+@import "var";
+
 .cart {
   background-color: #ffffff;
-  padding: 20px;
+  padding: $cart-padding;
+  margin-top: $header-margin;
 
   .wrap {
-    width: 100%;
+    height: 50px;
+    position: fixed;
+    top: $header-height + 10px;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    width: calc(100% - $cart-padding * 2);
+    z-index: 10;
+    background-color: #ffffff;
+
     .title {
       font-size: 24px;
     }
@@ -18,6 +26,9 @@
       padding: 5px;
       cursor: pointer;
       transition: .3s;
+      height: 30px;
+      display: flex;
+      align-items: center;
 
       &:hover {
         opacity: .5;
@@ -25,16 +36,20 @@
     }
   }
 
-
   .cartEmpty {
     color: #cd5c5c;
     text-align: center;
-    padding: 10px;
+    margin-top: 40px;
   }
+
   .cartList {
     position: relative;
     top: 50%;
     height: 50%;
+    max-height: calc(100vh - ($header-height + $cart-total-height + $cart-allDelete-height + $cart-wrap-height + $cart-padding));
+    overflow-y: auto;
+    padding: 30px 20px;
+
     .eachItem {
       display: grid;
       align-items: center;
@@ -59,27 +74,41 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+
         .name {
           font-size: 16px;
         }
+
         .price {
           font-size: 16px;
         }
       }
+
       // ボタン
-      .count {
+      .amountWrap {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        .countBtn {
-          width: 36px;
-          background: transparent;
-          border: none;
-          cursor: pointer;
+
+        .count {
+          display: flex;
+          align-items: center;
+
+          .plusBtn, .minusBtn {
+            width: 36px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+          }
         }
-        .emptyBtn {
-          color: #cd5c5c;
+
+        .deleteBtn {
+          width: 24px;
+          color: #777777;
           cursor: pointer;
+          display: flex;
+          align-items: center;
         }
       }
     }
@@ -93,6 +122,103 @@
   .total {
     font-size: 24px;
     text-align: right;
-    padding: 20px;
+    margin-bottom: 10px;
+    height: $cart-total-height;
+  }
+
+  .allDelete {
+    justify-content: flex-end;
+    display: none;
+    height: $cart-allDelete-height;
+
+    &.isVisible {
+      display: flex;
+    }
+
+    .allDeleteBtn {
+      background-color: #cd5c5c;
+      color: #ffffff;
+      border: none;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+
+  .allDeleteMask {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+
+    &.isOpen {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .allDeleteModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #ffffff;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s;
+
+    &.isOpen {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modalWrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+
+
+      .buttonBlock {
+        display: flex;
+        gap: 20px;
+
+        .yesBtn, .noBtn {
+          width: 50px;
+          border-radius: 5px;
+          transition: .3s;
+          color: #ffffff;
+          display: flex;
+          justify-content: center;
+          padding: 5px;
+          cursor: pointer;
+
+          &:hover {
+            opacity: .5;
+          }
+        }
+
+        .yesBtn {
+          border: 1px solid #cd5c5c;
+          background-color: #cd5c5c;
+        }
+
+        .noBtn {
+          border: 1px solid #333333;
+          background-color: #333333;
+        }
+      }
+    }
   }
 }

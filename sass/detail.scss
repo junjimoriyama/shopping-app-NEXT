@@ -1,0 +1,58 @@
+@import "var";
+
+.detail {
+  margin-top: $header-margin;
+  padding: 20px;
+  position: relative;
+  height: calc(100% - $header-height);
+
+
+
+  ul {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .detailItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #000000;
+      border-radius: 10px;
+      padding: 5px;
+    }
+  }
+
+  img {
+    width: 200px;
+    height: auto;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .backBtn {
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: .3s;
+
+    &:hover {
+      opacity: .5;
+    }
+  }
+}

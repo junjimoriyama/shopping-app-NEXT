@@ -1,0 +1,141 @@
+.update {
+  padding: 20px;
+
+  .updateProduct {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .list {
+      // display: flex;
+      // justify-content: center;
+      .eachProduct {
+        padding: 10px;
+
+        .id, .name, .price, .img, .category, .editBtn {
+          padding-right: 10px;
+        }
+
+        .id {
+          input {
+            width: 50px;
+          }
+        }
+
+        .price {
+          input {
+            text-align: right;
+          }
+        }
+
+        .category {
+          select {
+            height: 100%;
+            padding: 5px;
+          }
+        }
+
+        .updateBtn {
+          color: #ffffff;
+          background-color: #333333;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          padding: 0 5px;
+        }
+      }
+    }
+  }
+
+  .updateCategory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .categoryList {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid #000000;
+      display: flex;
+      padding: 5px;
+      display: inline-block;
+      margin-right: 10px;
+
+      .eachCategory {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+
+        .deleteCategory {
+          cursor: pointer;
+        }
+      }
+    }
+    input, .addCategoryBtn {
+      height: 50px;
+    }
+    .addCategoryBtn {
+      cursor: pointer;
+    }
+  }
+
+
+  .updateMask {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+
+    &.isOpen {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .updateModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #ffffff;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: .2s;
+
+    &.isOpen {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modalWrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+
+      p {
+        // モーダル消す時に空文字になっても要素固定
+        height: 10px;
+      }
+
+      .closeBtn {
+        color: #ffffff;
+        border: 1px solid #333333;
+        background-color: #333333;
+        border-radius: 5px;
+        padding: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}
