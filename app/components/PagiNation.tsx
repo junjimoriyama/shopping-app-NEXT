@@ -31,7 +31,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
   setEndPageNum,
 }) => {
   // state
-  const { productList, total } = useAppSelector((state) => state.product);
+  const { productList } = useAppSelector((state) => state.product);
 
   // ページ数の計算
   const totalPage = Math.ceil(displayedCount / perView) 

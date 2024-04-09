@@ -15,9 +15,13 @@ import {
   calcTotalPrice,
 } from "@/lib/features/shopping/slice/ProductSlice";
 import { PagiNation } from "../components/PagiNation";
+import { getSession } from '@/app/auth/Session'
 
 // css
 import "../../sass/product.scss";
+import { supabase } from "../utils/supabase";
+import { Header } from "../components/Header";
+
 
 // Product =============================================================
 const Product = () => {
@@ -140,15 +144,15 @@ const Product = () => {
     setAnimationItemId(id);
   };
 
+  // TODO:session取得 ============================================
+  useEffect(() => {
+    getSession()
+  }, []);
+
+
   return (
-    // <StoreProvider>
+    <>
     <div className="product">
-      <Link href="/backOffice/products/edit">
-        <button>edit</button>
-      </Link>
-      <Link href="/auth">
-        <button>auth</button>
-      </Link>
 
       <div className="wrap">
         <div className="totalPrice">total ¥{totalPrice}</div>
@@ -227,6 +231,7 @@ const Product = () => {
           })}
       </ul>
     </div>
+    </>
     // </StoreProvider>
   );
 };

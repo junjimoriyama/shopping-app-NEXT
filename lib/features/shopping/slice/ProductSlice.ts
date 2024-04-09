@@ -16,7 +16,6 @@ const initialState: productInitialState = {
   searchWord: '',
 }
 
-getAllSupabaseData
 
 // 非同期処理
 // fetchSupabaseDataこの処理は初期化の処理なので一度のみ呼び出す
@@ -43,31 +42,7 @@ export const fetchSupabaseData = createAsyncThunk('supabase/fetch',
       : []
   }
 )
-// // 非同期処理
-// // fetchSupabaseDataこの処理は初期化の処理なので一度のみ呼び出す
-// export const fetchSupabaseData = createAsyncThunk('supabase/fetch',
-//   async () => {
-//     const { data, error } = await supabase.from('shopping').select('*')
-//     if (error) {
-//       throw new Error(error.message)
-//     }
 
-//     // データを返すことでaction.payloadに接続できる
-//     // dbのデータにreduxで管理するamountを追加
-//     return data ? data.map(product => {
-//       return {
-//         ...product,
-//         // 数
-//         amount: 0,
-//         // 時間順
-//         addedAt: null,
-//         // 表示有無
-//         display: true
-//       }
-//     })
-//       : []
-//   }
-// )
 
 // データの更新
 export const updateSupabaseData = createAsyncThunk('product/update',

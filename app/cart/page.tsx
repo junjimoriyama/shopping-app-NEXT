@@ -15,6 +15,7 @@ import {
 } from "@/lib/features/shopping/slice/ProductSlice";
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { Header } from "../components/Header";
 
 const Cart = () => {
   // state
@@ -43,6 +44,7 @@ const Cart = () => {
   }, [productList]);
 
   return (
+    <>
     <div className="cart">
       <div className="wrap">
         <p className="title">shoppingCart</p>
@@ -136,6 +138,7 @@ const Cart = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

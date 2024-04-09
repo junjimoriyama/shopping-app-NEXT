@@ -9,8 +9,25 @@ import { CartIcon, SearchIcon } from "@/public/icons/HeroIcons";
 import { searchProduct } from "@/lib/features/shopping/slice/ProductSlice";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Logout } from "../auth/Logout";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 export const Header = () => {
+
+  const [ isShowHeader, setIsShowHeader  ] = useState(true)
+
+  // パスネーム
+  const pathname = usePathname()
+
+  useEffect(() => {
+   if( pathname === '/') {
+    setIsShowHeader(false)
+   } else {
+    setIsShowHeader(true)
+   }
+  }, [pathname])
+ 
+
   const { productList, selectedImg, selectedCategoryValue, clickCount, searchWord } = useAppSelector((state) => state.product);
 
   // 検索アイコンの有無
@@ -29,20 +46,16 @@ export const Header = () => {
   const [addCartImg, setAddCartImg] = useState("");
   // カートに入れる画像のアニメーション発火
   const [isVisible, setIsVisible] = useState(false);
-  // 検索文字
-  // const [searchWord, setSearchWord] = useState("");
-  // 
-
 
   useEffect(() => {
-    // setClickCount(clickCount + 1)
-    setAddCartImg(selectedImg);
-    setIsVisible(true);
+    setAddCartImg(selectedImg)
+    setIsVisible(true)
     const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 1000);
+      setIsVisible(false)
+    }, 1000)
     return () => clearTimeout(timer);
-  }, [selectedImg, clickCount]);
+  }, [selectedImg, clickCount])
+
 
   const inputSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 検索ボックスのアイコン表示非表示
@@ -53,10 +66,16 @@ export const Header = () => {
   };
 
   return (
-    <header>
+    <header className={`${isShowHeader ? 'isVisible' : ''}`}>
       <div className="title">
-        <Link href="/">SUPER MARKET</Link>
+        <Link href="/product">SUPER MARKET</Link>
       </div>
+
+      <Link href="/backOffice/products/edit">
+        <button>edit</button>
+      </Link>
+
+      <Logout />
 
       <div className="wrap">
         <div className="search">

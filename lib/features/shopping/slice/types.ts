@@ -32,3 +32,9 @@ export interface pageInitialState {
 export interface CategoryInitialState {
   categoryList: string[]
 }
+
+// auth
+// export interface authInitialState {
+//   signIn: boolean,
+//   login: boolean
+// }

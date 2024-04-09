@@ -54,6 +54,7 @@ const list = () => {
     value: string | number
   ) => {
     // 前のeditProductDataの状態をコピーして展開
+    // オブジェクトID(メモリアドレス)を変わらないと更新の認識をされない。
     setEditProductData((prev) => ({
       ...prev,
       // 動的なobject生成(例: 1: {'name': 'carrot'})
@@ -69,7 +70,7 @@ const list = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   // 成功
   const [isSuccess, setIsSuccess] = useState(false);
-  // 成功
+  // 失敗
   const [isFailure, setIsFailure] = useState(false);
 
   // 編集内容の反映

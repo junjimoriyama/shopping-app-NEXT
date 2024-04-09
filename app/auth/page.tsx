@@ -1,26 +1,51 @@
-import React from "react";
-import { SupabaseListener } from "../components/SupabaseListener";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Login } from "./Login";
+import { getSession } from "./Session";
+// Session 型をインポート
+import { Session } from "@supabase/supabase-js";
 
 // css
 import "@/sass/auth/auth.scss";
-import ModalCore from "../components/modalCore";
-import SignUpForm from "../components/modal/signUpForm";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const Auth = () => {
+  // const router = useRouter();
+  const pathname = usePathname();
+  // '/auth' パスでこのページにアクセスされた場合のみ showHeader を false にする
+  const showHeader = pathname !== "/";
+
+  // sessionの状態
+  const [sessionData, setSessionData] = useState<Session | null>(null);
+
+  // useEffect(() => {
+  //   // セッション取得
+  //   const fetchSession = async () => {
+  //     const result = await getSession();
+  //     setSessionData(result.session);
+  //   };
+  //   fetchSession();
+  // }, []);
+
   return (
     <>
-      {/* <SignUpForm /> */}
-      <div className="auth">
-        <div className="wrap">
-          <div className="login">
-            <button className="loginBtn">login</button>
-          </div>
+    <div className="title">SUPER MARKET</div>
+    <div className="auth">
+      {/* セッションがあれば<SignUp />表示しない */}
+      <div className="authWrap">
+        
+        <Login />
 
-          <div className="signUp">
-            <button className="signUpBtn">signUp</button>
-          </div>
-        </div>
+        <div className="or">or</div>
+
+        <Link href="/auth/signUp">
+          <button className="moveSingUpBtn">Sing Up</button>
+        </Link>
+        
       </div>
+    </div>
     </>
   );
 };

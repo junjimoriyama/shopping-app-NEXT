@@ -5,13 +5,18 @@ header {
   width: 100%;
   height: $header-height;
   color: #ffffff;
-  display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  position: sticky;
+  // position: sticky;
   top: 0;
   z-index: 10;
+  display: none;
+
+  &.isVisible {
+    display: flex;
+  }
+
   .title {
     font-size: 30px;
   }

@@ -28,9 +28,8 @@ export default function Page({ params }: PageProps) {
   });
   
 
-
-
   return (
+    <>
     <div className="detail">
       <ul>
         {productList
@@ -52,5 +51,6 @@ export default function Page({ params }: PageProps) {
         <button className="backBtn">back</button>
       </Link>
     </div>
+    </>
   );
 }

@@ -1,24 +1,115 @@
+.title {
+  font-size: 30px;
+  padding: 10px;
+}
+
 .auth {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  .wrap {
-    border: 1px solid #000000;
+  .authWrap {
+    border: 3px solid #333333;
     border-radius: 5px;
     padding: 10px;
+    background-color: #f3eee4;
+    box-shadow: 10px 10px 5px -5px #a9a8a8;
+
+    .login {
+      .heading {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .loginForm {
+        .inputForm {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 10px;
+
+          input {
+            border-radius: 30px;
+            border: 2px solid #333333;
+            padding: 5px 7px;
+            cursor: pointer;
+            width: 300px;
+            transition: .3s;
+
+            &:focus {
+              border: 2px solid goldenrod;
+              outline: none;
+            }
+          }
+        }
+
+        .btnWrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+
+          .loginBtn {
+            color: #ffffff;
+            background-color: #333333;
+            width: 300px;
+            cursor: pointer;
+            transition: .3s;
+            border-radius: 5px;
+            border: none;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &:hover {
+              color: #000000;
+              background-color: goldenrod;
+              border: transparent;
+            }
+          }
+        }
+      }
+
+      .cantMatchMsg {
+        display: none;
+        text-align: center;
+        padding: 0 0 5px 0;
+        color: #cd5c5c;
+
+        &.isVisible {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .or {
+    text-align: center;
+    height: 30px;
+  }
+
+
+  .moveSingUpBtn {
+    color: #ffffff;
+    background-color: #555555;
     width: 300px;
-    height: 200px;
-    // .login {
-    //   .loginBtn {
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    //   }
-    // }
-    // .signUp {
-    //   .signUpBtn {
-
-    //   }
-    // }
+    &:hover {
+      color: #000000;
+      background-color: goldenrod;
+      border: transparent;
+    }
   }
 }
