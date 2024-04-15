@@ -1,23 +1,26 @@
-'use client'
+'use client';
 
-import { useRouter } from "next/navigation";
-import { supabase } from "../utils/supabase";
+// next
+import { useRouter } from 'next/navigation';
+// supabase
+import { supabase } from '../../utils/supabase';
 
 export function Logout() {
+   /* 変数 ===========================================*/
   const router = useRouter();
 
+  /* 関数 ===========================================*/
   const onLogout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const { error: logoutError } = await supabase.auth.signOut();
-
       if (logoutError) {
         throw logoutError;
       }
-      router.push('/')
+      router.push('/auth/login');
     } catch (error) {
-      throw error
+      throw error;
     }
   };
 
@@ -30,3 +33,5 @@ export function Logout() {
     </div>
   );
 }
+
+// export default Logout

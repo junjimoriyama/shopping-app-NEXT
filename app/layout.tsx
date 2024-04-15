@@ -1,36 +1,32 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import StoreProvider from "./StoreProvider";
-import { Header } from "./components/Header";
-// import { SupabaseListener } from "./components/SupabaseListener";
-// import { Auth } from "./auth/page";
 
-import { useRouter } from 'next/navigation'
+// next
+import type { Metadata } from 'next';
+// redux
+import StoreProvider from './StoreProvider';
+// components
+import { Header } from './components/Header';
+// font
+import { Inter } from 'next/font/google';
+// css
+import './globals.css';
 
-
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "shopping",
-  description: "shopping",
+  title: 'shopping',
+  description: 'shopping',
 };
 
 export default function RootLayout({
-
   children,
-  // ヘッダーの表示
-  // showHeader = true
 }: Readonly<{
   children: React.ReactNode;
-  // showHeader: boolean
 }>) {
-
   return (
     <html lang="ja">
       <body className={inter.className}>
         <StoreProvider>
-        <Header />
+          <Header />
           {children}
         </StoreProvider>
       </body>

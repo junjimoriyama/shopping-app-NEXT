@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-recess-order",
+    "stylelint-config-rational-order"
+  ],
+  "rules": {
+    "scss/operator-no-newline-after": null,
+    "no-descending-specificity": null,
+    "no-empty-source": null,
+    "selector-class-pattern": null,
+    "keyframes-name-pattern": null,
+    "scss/dollar-variable-pattern": null,
+    "order/properties-alphabetical-order": true,
+    "color-hex-length": "short"
+  }
+}

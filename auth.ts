@@ -1,6 +1,5 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-
+import NextAuth, { NextAuthConfig } from 'next-auth';
+import GithubProvider from 'next-auth/providers/github';
 
 export const config: NextAuthConfig = {
   // secret: process.env.AUTH_SECRET,
@@ -15,20 +14,20 @@ export const config: NextAuthConfig = {
   callbacks: {
     authorized({ request, auth }) {
       try {
-        const { pathname } = request.nextUrl
+        const { pathname } = request.nextUrl;
         if (pathname === '/protected-page') {
-          return !!auth
+          return !!auth;
         }
-        return true
+        return true;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     jwt({ token, trigger, session }) {
-      if (trigger === 'update') token.name = session.user.name
-      return token
-    }
-  }
-}
+      if (trigger === 'update') token.name = session.user.name;
+      return token;
+    },
+  },
+};
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

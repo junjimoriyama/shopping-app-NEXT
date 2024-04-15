@@ -1,8 +1,8 @@
 // css
-import { use, useState } from "react";
-import "../../sass/pagination.scss";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { selectedNumber } from "@/lib/features/shopping/slice/PageSlice";
+import { use, useState } from 'react';
+import '../../sass/pagination.scss';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { selectedNumber } from '@/lib/features/shopping/slice/PageSlice';
 // import { selectedNumber } from "@/lib/features/shopping/slice/ProductSlice";
 
 interface PageNationProps {
@@ -34,10 +34,9 @@ export const PagiNation: React.FC<PageNationProps> = ({
   const { productList } = useAppSelector((state) => state.product);
 
   // ページ数の計算
-  const totalPage = Math.ceil(displayedCount / perView) 
+  const totalPage = Math.ceil(displayedCount / perView);
 
   const dispatch = useAppDispatch();
-
 
   return (
     <div className="pagination">
@@ -49,7 +48,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
         {/* ページ番号 */}
         {Array.from({ length: totalPage }, (_, i) => (
           <button
-            className={`pageNum ${i + 1 === activePage ? "isActive" : ""}`}
+            className={`pageNum ${i + 1 === activePage ? 'isActive' : ''}`}
             key={i}
             onClick={() => {
               paginate(i);
@@ -71,9 +70,9 @@ export const PagiNation: React.FC<PageNationProps> = ({
           name=""
           id=""
           onChange={(e) => {
-            dispatch(selectedNumber(e.target.value))
+            dispatch(selectedNumber(e.target.value));
             const selectedValue = e.target.value;
-            if (selectedValue === "all") {
+            if (selectedValue === 'all') {
               // 全ての商品表示
               setPerView(displayedCount),
                 // 表示ページ開始

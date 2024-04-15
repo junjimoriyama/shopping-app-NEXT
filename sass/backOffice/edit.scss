@@ -1,19 +1,47 @@
+@mixin modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 200px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  opacity: 0;
+  transition: .2s;
+
+  &.isOpen {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+
+
 .update {
   padding: 20px;
 
   .updateProduct {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 20px;
+    overflow-x: scroll;
 
-    .list {
-      // display: flex;
-      // justify-content: center;
+    .datalist {
       .eachProduct {
-        padding: 10px;
 
-        .id, .name, .price, .img, .category, .editBtn {
-          padding-right: 10px;
+        tr {
+          td {
+            &:not(:last-of-type) {
+              padding-right: 5px;
+            }
+          }
         }
 
         .id {
@@ -22,9 +50,36 @@
           }
         }
 
+        .name {
+          input {
+            width: 100px;
+          }
+        }
+
         .price {
           input {
+            width: 60px;
             text-align: right;
+          }
+        }
+
+        .image {
+          display: flex;
+          height: 100%;
+          align-items: stretch;
+          img {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+          }
+
+          .fileSelectBtn {
+            background-color: #777;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 0 3px;
+            height: 20px;
+            border-radius: 3px;
           }
         }
 
@@ -32,96 +87,165 @@
           select {
             height: 100%;
             padding: 5px;
+
           }
         }
 
-        .updateBtn {
+        .description {
+          textarea {
+            display: flex;
+            transition: .3s;
+            height: 25px;
+            padding: 3px;
+
+            &.isExpand {
+              height: 100px;
+            }
+          }
+        }
+
+
+        ._update {
+          .updateBtn {
+            align-items: center;
+            padding: 0 5px;
+            color: #ffffff;
+            background-color: #333333;
+            border-radius: 3px;
+            cursor: pointer;
+            
+            &:disabled {
+              opacity: 0.5;
+              pointer-events: none;
+            }
+
+            &:hover {
+              opacity: 0.5;
+            }
+          }
+        }
+
+        ._delete {
+          // display: flex;
+          // justify-content: center;
+
+          .deleteBtn {
+            display: flex;
+            align-items: center;
+            width: 24px;
+            color: #777777;
+            cursor: pointer;
+
+            &:hover {
+              opacity: 0.5;
+            }
+          }
+        }
+
+      }
+    }
+    
+
+    .addProduct {
+      .newId {
+        input {
+          width: 20px;
+        }
+      }
+
+      .newName {
+        input {
+          width: 100px;
+        }
+      }
+
+      .newPrice {
+        input {
+          width: 60px;
+          text-align: right;
+        }
+      }
+
+      .newImage {
+        text-align: center;
+
+        img {
+          width: 30px;
+          height: 30px;
+        }
+
+        .newFileSelectBtn {
+          background-color: #777;
           color: #ffffff;
-          background-color: #333333;
           cursor: pointer;
-          display: flex;
+          padding: 0 3px;
+          height: 20px;
+          border-radius: 3px;
+        }
+      }
+
+      .newCategory {
+        select {
+          height: 100%;
+          padding: 5px;
+
+        }
+      }
+
+      .newDescription {
+        textarea {
+          transition: .3s;
+          height: 25px;
+          padding: 3px;
+
+          &.isExpand {
+            height: 100px;
+          }
+        }
+      }
+      .add {
+        .addBtn {
           align-items: center;
           padding: 0 5px;
-        }
-      }
-    }
-  }
-
-  .updateCategory {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .categoryList {
-      display: flex;
-      justify-content: space-between;
-      border: 1px solid #000000;
-      display: flex;
-      padding: 5px;
-      display: inline-block;
-      margin-right: 10px;
-
-      .eachCategory {
-        display: flex;
-        gap: 20px;
-        justify-content: space-between;
-
-        .deleteCategory {
+          color: #ffffff;
+          background-color: goldenrod;
+          border-radius: 3px;
           cursor: pointer;
+          width: 100px;
+
+          &:hover {
+            opacity: 0.5;
+          }
         }
       }
-    }
-    input, .addCategoryBtn {
-      height: 50px;
-    }
-    .addCategoryBtn {
-      cursor: pointer;
     }
   }
 
 
-  .updateMask {
+
+  .mask {
     position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, .5);
     z-index: 100;
-    opacity: 0;
+    background-color: rgb(0 0 0 / 50%);
     visibility: hidden;
+    opacity: 0;
     transition: .3s;
+    inset: 0;
 
     &.isOpen {
-      opacity: 1;
       visibility: visible;
+      opacity: 1;
     }
   }
 
   .updateModal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    border-radius: 10px;
-    width: 300px;
-    height: 200px;
-    background-color: #ffffff;
-    z-index: 200;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: .2s;
-
-    &.isOpen {
-      opacity: 1;
-      visibility: visible;
-    }
+    @include modalStyle();
 
     .modalWrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 20px;
+      align-items: center;
 
       p {
         // モーダル消す時に空文字になっても要素固定
@@ -129,13 +253,93 @@
       }
 
       .closeBtn {
-        color: #ffffff;
-        border: 1px solid #333333;
-        background-color: #333333;
-        border-radius: 5px;
         padding: 5px;
+        color: #ffffff;
+        background-color: #333333;
+        border: 1px solid #333333;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+  
+
+  .deleteConfModal {
+    @include modalStyle();
+
+    .modalWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+
+      .judgeBtn {
+        display: flex;
+        gap: 20px;
+
+        .yesBtn,
+        .noBtn {
+          padding: 5px;
+          width: 50px;
+          border-radius: 5px;
+          color: #ffffff;
+        }
+
+        .yesBtn {
+          background-color: #cd5c5c;
+        }
+
+        .noBtn {
+          background-color: #333;
+        }
+      }
+
+      p {
+        // モーダル消す時に空文字になっても要素固定
+        height: 10px;
+      }
+
+      .closeBtn {
+        padding: 5px;
+        color: #ffffff;
+        background-color: #333333;
+        border: 1px solid #333333;
+        border-radius: 5px;
         cursor: pointer;
       }
     }
   }
 }
+
+// .updateCategory {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   .categoryList {
+//     display: inline-block;
+//     justify-content: space-between;
+//     margin-right: 10px;
+//     padding: 5px;
+//     border: 1px solid #000000;
+
+//     .eachCategory {
+//       display: flex;
+//       gap: 20px;
+//       justify-content: space-between;
+
+//       .deleteCategory {
+//         cursor: pointer;
+//       }
+//     }
+//   }
+
+//   input,
+//   .addCategoryBtn {
+//     height: 50px;
+//   }
+
+//   .addCategoryBtn {
+//     cursor: pointer;
+//   }
+// }

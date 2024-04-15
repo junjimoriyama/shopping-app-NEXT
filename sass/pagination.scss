@@ -3,52 +3,54 @@
   gap: 10px;
 
   .wrap {
-    .prevBtn, .nextBtn {
+    .prevBtn,
+    .nextBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 30px;
       height: 30px;
-      border: 1px solid #000000;
       padding: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #fff;
+      border: 1px solid #000;
       cursor: pointer;
-      background-color: #ffffff;
 
       &:hover {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
 
     .pageNum {
-      width: 30px;
-      height: 30px;
-      border: 1px solid #000000;
-      padding: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #000;
       cursor: pointer;
-      background-color: #ffffff;
 
       &.isActive {
-        background-color: #333333;
-        color: #ffffff;
+        color: #fff;
+        background-color: #333;
       }
 
       &:hover {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
   }
 
-
   .PerPageSelect {
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
+
     .displayedNum {
       font-size: 12px;
     }
+
     select {
       width: 50px;
       height: 30px;

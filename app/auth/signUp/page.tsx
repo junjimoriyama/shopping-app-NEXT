@@ -1,16 +1,16 @@
-"use client";
-import { useState } from "react";
-import { supabase } from "../../utils/supabase";
+'use client';
+import { useState } from 'react';
+import { supabase } from '../../utils/supabase';
 
 // css
-import "@/sass/auth/signUp.scss";
+import '@/sass/auth/signUp.scss';
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConf, setPasswordConf] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConf, setPasswordConf] = useState('');
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,19 +20,20 @@ const SignUp = () => {
         email: email,
         password: password,
         options: {
-          emailRedirectTo: `${window.location.origin}`,
+          emailRedirectTo: `${window.location.origin + '/completedSignUp'}`,
         },
       });
-      console.log(error)
+      console.log(error);
       if (error?.message.includes('Email rate limit exceeded')) {
-        setErrorMsg('リミットに到達しました。')
+        setErrorMsg('Email rate limit exceeded');
       }
 
       // 登録されているメールアドレスの場合、空の配列が返ってくる。
       // 分岐の条件見直し data.user?がない場合も想定
       const identities = data.user?.identities;
+      console.log(data.user);
       if (identities?.length === 0) {
-        setErrorMsg("既に登録済みのユーザーです。");
+        setErrorMsg('already a registered user');
       }
     } catch (error) {
       alert(error);
@@ -41,11 +42,7 @@ const SignUp = () => {
 
   return (
     <div className="signUp">
-      <p className={ `errorMsg ${errorMsg ? 'isVisible' : ''}`}>
-        {errorMsg}
-      </p>
-
-      <div className="signUpWrap">
+      <div className="formWrap">
         <div className="heading">sing Up</div>
         <form className="signUpForm" onSubmit={onSubmit}>
           <div className="inputForm">
@@ -72,6 +69,10 @@ const SignUp = () => {
             />
           </div>
           <div>
+            <div className={`errorMsg ${errorMsg ? 'isVisible' : ''}`}>
+              {errorMsg}
+            </div>
+
             <button className="signUpBtn" type="submit">
               signUp
             </button>

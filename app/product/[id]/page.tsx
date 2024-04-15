@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { fetchSupabaseData } from "@/lib/features/shopping/slice/ProductSlice";
-import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import Link from "next/link";
-import { useEffect } from "react";
-// useRouter
-import { useRouter } from "next/navigation";
-
+// react
+import { useAppSelector } from '@/lib/hooks';
+// next
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 // css
-import "@/sass/detail.scss";
+import '@/sass/detail.scss';
+import { useEffect } from 'react';
 
+// 型定義 ===========================================
 // paramsの型
 interface PageProps {
   params: {
@@ -18,39 +18,46 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-  const { productList, totalPrice } = useAppSelector((state) => state.product);
+  /* state ===========================================*/
+  const { productList } = useAppSelector((state) => state.product);
 
+  /* hooks ===========================================*/
   const router = useRouter();
 
+  /* 関数 ===========================================*/
   // リロードしたら商品一覧ページに戻る
-  window.addEventListener("load", () => {
-    router.push("/");
+  window.addEventListener('load', () => {
+    router.push('/');
   });
-  
+
+  // スクロール状態を無効化()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
-    <div className="detail">
-      <ul>
-        {productList
-          .filter((item) => item.display && item.name === params.id)
-          .map((item) => {
-            return (
-              <li className="detailItem" key={item.id}>
-                {/* <div className="img"> */}
-                <img src={`/images/${item.image}`} />
-                {/* </div> */}
-                <p className="name">{item.name}</p>
-                <p className="description"> {item.description}</p>
-                <p className="price">¥{item.price}</p>
-              </li>
-            );
-          })}
-      </ul>
-      <Link href="/product">
-        <button className="backBtn">back</button>
-      </Link>
-    </div>
+      <div className="detail">
+        <ul>
+          {productList
+            .filter((item) => item.display && item.name === params.id)
+            .map((item) => {
+              return (
+                <li className="detailItem" key={item.id}>
+                  {/* <div className="img"> */}
+                  <img src={`/images/${item.image}`} />
+                  {/* </div> */}
+                  <p className="name">{item.name}</p>
+                  <p className="description"> {item.description}</p>
+                  <p className="price">¥{item.price}</p>
+                </li>
+              );
+            })}
+        </ul>
+        <Link href="/product">
+          <button className="backBtn">back</button>
+        </Link>
+      </div>
     </>
   );
 }

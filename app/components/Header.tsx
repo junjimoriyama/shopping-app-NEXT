@@ -1,34 +1,44 @@
-"use client";
+'use client';
 
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 // import { UserButton } from "./auth/UserButton";
 
-import "@/sass/header.scss";
+// css
+import '@/sass/header.scss';
 
-import { CartIcon, SearchIcon } from "@/public/icons/HeroIcons";
-import { searchProduct } from "@/lib/features/shopping/slice/ProductSlice";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { Logout } from "../auth/Logout";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { CartIcon, SearchIcon } from '@/public/icons/HeroIcons';
+import { searchProduct } from '@/lib/features/shopping/slice/ProductSlice';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { Logout } from '../auth/logout/Logout';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+
+import { Account } from '@/app/auth/Account';
 
 export const Header = () => {
-
-  const [ isShowHeader, setIsShowHeader  ] = useState(true)
+  // ヘッダーの表示非表示(ページによる)
+  const [isShowHeader, setIsShowHeader] = useState(true);
+  // ヘッダー内部のメニュー表示非表示(ページによる)
+  const [isShowUserMenu, setIsShowUserMenu] = useState(true);
 
   // パスネーム
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   useEffect(() => {
-   if( pathname === '/') {
-    setIsShowHeader(false)
-   } else {
-    setIsShowHeader(true)
-   }
-  }, [pathname])
- 
+    // ヘッダーの表示非表示
+    setIsShowHeader(!pathname.startsWith('/backOffice'))
+    // ヘッダーメニューの表示非表示
+    setIsShowUserMenu(!(pathname === '/' ||
+    pathname.startsWith('/auth')))
+  }, [pathname]);
 
-  const { productList, selectedImg, selectedCategoryValue, clickCount, searchWord } = useAppSelector((state) => state.product);
+  const {
+    productList,
+    selectedImg,
+    selectedCategoryValue,
+    clickCount,
+    searchWord,
+  } = useAppSelector((state) => state.product);
 
   // 検索アイコンの有無
   const [isSearchIcon, setIsSearchIcon] = useState(true);
@@ -43,19 +53,18 @@ export const Header = () => {
   });
 
   // カートに入れる画像
-  const [addCartImg, setAddCartImg] = useState("");
+  const [addCartImg, setAddCartImg] = useState('');
   // カートに入れる画像のアニメーション発火
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setAddCartImg(selectedImg)
-    setIsVisible(true)
+    setAddCartImg(selectedImg);
+    setIsVisible(true);
     const timer = setTimeout(() => {
-      setIsVisible(false)
-    }, 1000)
+      setIsVisible(false);
+    }, 1000);
     return () => clearTimeout(timer);
-  }, [selectedImg, clickCount])
-
+  }, [selectedImg, clickCount]);
 
   const inputSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 検索ボックスのアイコン表示非表示
@@ -71,37 +80,45 @@ export const Header = () => {
         <Link href="/product">SUPER MARKET</Link>
       </div>
 
-      <Link href="/backOffice/products/edit">
-        <button>edit</button>
-      </Link>
+      <div className={`userMenu ${isShowUserMenu ? 'isVisible' : ''}`}>
+        {/* アカウント */}
+        <Account />
 
-      <Logout />
-
-      <div className="wrap">
-        <div className="search">
-          <input
-            type="text"
-            className="searchBox"
-            value={searchWord}
-            onChange={(e) => inputSearchValue(e)}
-          />
-          <div className="searchBtn">{isSearchIcon ? <SearchIcon /> : ""}</div>
-        </div>
-        <Link href="/cart">
-          <div className="cartIcon">
-            <CartIcon />
-            {totalAmount > 0 ? (
-              <div className="totalAmount">{totalAmount}</div>
-            ) : null}
-            {addCartImg && (
-              <img
-                className={`addCartImg ${isVisible ? "animate" : ""}`}
-                src={`images/${addCartImg}`}
-                alt=""
-              />
-            )}
-          </div>
+        <Link href="/backOffice/products/edit">
+          <button>edit</button>
         </Link>
+
+
+        <Logout />
+
+        <div className="wrap">
+          <div className="search">
+            <input
+              type="text"
+              className="searchBox"
+              value={searchWord}
+              onChange={(e) => inputSearchValue(e)}
+            />
+            <div className="searchBtn">
+              {isSearchIcon ? <SearchIcon /> : ''}
+            </div>
+          </div>
+          <Link href="/cart">
+            <div className="cartIcon">
+              <CartIcon />
+              {totalAmount > 0 ? (
+                <div className="totalAmount">{totalAmount}</div>
+              ) : null}
+              {addCartImg && (
+                <img
+                  className={`addCartImg ${isVisible ? 'animate' : ''}`}
+                  src={`images/${addCartImg}`}
+                  alt=""
+                />
+              )}
+            </div>
+          </Link>
+        </div>
       </div>
 
       {/* <UserButton/> */}

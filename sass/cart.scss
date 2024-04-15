@@ -1,34 +1,36 @@
 @import "var";
+$cart-padding: 10px;
 
 .cart {
   background-color: #ffffff;
-  padding: $cart-padding;
   margin-top: $header-margin;
+  // padding: $cart-padding;
 
-  .wrap {
-    height: 50px;
-    position: fixed;
-    top: $header-height + 10px;
+  .cartTop {
+    position: sticky;
+    top: $header-height;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
-    width: calc(100% - $cart-padding * 2);
-    z-index: 10;
+    width: 100%;
+    height: 50px;
     background-color: #ffffff;
+    padding: $cart-padding;
 
     .title {
       font-size: 24px;
     }
 
     .goShopBtn {
-      background-color: #333333;
-      color: #ffffff;
-      border-radius: 5px;
-      padding: 5px;
-      cursor: pointer;
-      transition: .3s;
-      height: 30px;
       display: flex;
       align-items: center;
+      height: 30px;
+      padding: 5px;
+      color: #ffffff;
+      background-color: #333333;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: .3s;
 
       &:hover {
         opacity: .5;
@@ -37,24 +39,30 @@
   }
 
   .cartEmpty {
+    margin-top: 40px;
     color: #cd5c5c;
     text-align: center;
-    margin-top: 40px;
   }
 
   .cartList {
     position: relative;
     top: 50%;
     height: 50%;
-    max-height: calc(100vh - ($header-height + $cart-total-height + $cart-allDelete-height + $cart-wrap-height + $cart-padding));
+    // max-height: calc(
+    // 100vh -
+    // (
+    // $header-height + $cart-total-height + $cart-allDelete-height +
+    // $cart-wrap-height + $cart-padding
+    // )
+    // );
+    padding: $cart-padding;
     overflow-y: auto;
-    padding: 30px 20px;
 
     .eachItem {
       display: grid;
-      align-items: center;
-      grid-template-columns: auto 1fr auto;
       grid-column-gap: 20px;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
 
       &:not(:last-of-type) {
         margin-bottom: 20px;
@@ -94,21 +102,21 @@
           align-items: center;
 
           .plusBtn, .minusBtn {
+            display: flex;
+            align-items: center;
             width: 36px;
             background: transparent;
             border: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
           }
         }
 
         .deleteBtn {
+          display: flex;
+          align-items: center;
           width: 24px;
           color: #777777;
           cursor: pointer;
-          display: flex;
-          align-items: center;
         }
       }
     }
@@ -119,90 +127,93 @@
     background-color: #333333;
   }
 
-  .total {
-    font-size: 24px;
-    text-align: right;
-    margin-bottom: 10px;
-    height: $cart-total-height;
-  }
-
-  .allDelete {
-    justify-content: flex-end;
-    display: none;
-    height: $cart-allDelete-height;
-
-    &.isVisible {
-      display: flex;
+  .cartBottom {
+    padding: $cart-padding;
+    .total {
+      height: $cart-total-height;
+      margin-bottom: 10px;
+      font-size: 24px;
+      text-align: right;
     }
 
-    .allDeleteBtn {
-      background-color: #cd5c5c;
-      color: #ffffff;
-      border: none;
-      padding: 5px;
-      border-radius: 5px;
-      cursor: pointer;
+    .allDelete {
+      display: none;
+      justify-content: flex-end;
+      height: $cart-allDelete-height;
+
+      &.isVisible {
+        display: flex;
+      }
+
+      .allDeleteBtn {
+        padding: 5px;
+        color: #ffffff;
+        background-color: #cd5c5c;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
     }
   }
 
   .allDeleteMask {
     position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, .5);
     z-index: 100;
-    opacity: 0;
+    background-color: rgb(0 0 0 / 50%);
     visibility: hidden;
+    opacity: 0;
     transition: .3s;
+    inset: 0;
 
     &.isOpen {
-      opacity: 1;
       visibility: visible;
+      opacity: 1;
     }
   }
+
 
   .allDeleteModal {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    border-radius: 10px;
-    width: 300px;
-    height: 200px;
-    background-color: #ffffff;
     z-index: 200;
     display: flex;
-    justify-content: center;
     align-items: center;
-    opacity: 0;
+    justify-content: center;
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
     visibility: hidden;
+    opacity: 0;
     transition: .5s;
 
     &.isOpen {
-      opacity: 1;
       visibility: visible;
+      opacity: 1;
     }
 
     .modalWrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 20px;
-
+      align-items: center;
 
       .buttonBlock {
         display: flex;
         gap: 20px;
 
         .yesBtn, .noBtn {
-          width: 50px;
-          border-radius: 5px;
-          transition: .3s;
-          color: #ffffff;
           display: flex;
           justify-content: center;
+          width: 50px;
           padding: 5px;
+          color: #ffffff;
+          border-radius: 5px;
           cursor: pointer;
+          transition: .3s;
 
           &:hover {
             opacity: .5;
@@ -210,13 +221,13 @@
         }
 
         .yesBtn {
-          border: 1px solid #cd5c5c;
           background-color: #cd5c5c;
+          border: 1px solid #cd5c5c;
         }
 
         .noBtn {
-          border: 1px solid #333333;
           background-color: #333333;
+          border: 1px solid #333333;
         }
       }
     }

@@ -1,8 +1,6 @@
-
 import { supabase } from '@/app/utils/supabase';
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { pageInitialState } from "./types";
-
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { pageInitialState } from './types';
 
 export const PageSlice = createSlice({
   name: 'page',
@@ -10,11 +8,11 @@ export const PageSlice = createSlice({
 
   reducers: {
     selectedNumber: (state, action: PayloadAction<number | string>) => {
-      state.page = action.payload
-    }
-  }
-})
+      state.page = action.payload;
+    },
+  },
+});
 
-export const { selectedNumber } = PageSlice.actions
+export const { selectedNumber } = PageSlice.actions;
 
-export default PageSlice.reducer
+export default PageSlice.reducer;

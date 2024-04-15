@@ -1,17 +1,17 @@
 @import "var";
 
 header {
-  background-color: #333333;
-  width: 100%;
-  height: $header-height;
-  color: #ffffff;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  // position: sticky;
+  position: fixed;
   top: 0;
   z-index: 10;
   display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: $header-height;
+  padding: 20px;
+  color: #ffffff;
+  background-color: #333333;
 
   &.isVisible {
     display: flex;
@@ -21,83 +21,98 @@ header {
     font-size: 30px;
   }
 
-  .wrap {
-    display: flex;
-    align-items: center;
+  .userMenu {
+    display: none;
     gap: 20px;
+    align-items: center;
 
-    .search {
+    &.isVisible {
       display: flex;
-      gap: 5px;
-      position: relative;
-
-      .searchBox {
-        width: 150px;
-        height: 30px;
-        padding: 5px;
-        border-radius: 5px;
-        transition: .3s;
-
-        &:focus {
-          outline: none;
-          background-color: #fad0d0;
-        }
-      }
-
-      .searchBtn {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 30px;
-        height: 30px;
-        padding: 5px;
-        color: #333333;
-        cursor: pointer;
-      }
     }
-    .cartIcon {
-      position: relative;
+
+    .wrap {
       display: flex;
+      gap: 20px;
       align-items: center;
-      cursor: pointer;
 
-      svg {
-        cursor: pointer;
-        width: 40px;
-        // height: 24px;
-      }
-      .totalAmount {
-        position: absolute;
-        top: -10px;
-        left: 50%;
-        background-color: #ffffff;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        color: #333333;
-        display: grid;
-        place-items: center;
-      }
-      .addCartImg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        opacity: 0;
+      .search {
+        position: relative;
+        display: flex;
+        gap: 5px;
 
-        &.animate {
-          animation: addCartImg 1s;
+        .searchBox {
+          width: 150px;
+          height: 30px;
+          padding: 5px;
+          border-radius: 5px;
+          transition: .3s;
+
+          &:focus {
+            background-color: #fad0d0;
+            outline: none;
+          }
         }
 
-        @keyframes addCartImg {
-          0% {
-            scale: 3;
+        .searchBtn {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 30px;
+          height: 30px;
+          padding: 5px;
+          color: #333333;
+          cursor: pointer;
+        }
+      }
+
+      .cartIcon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        svg {
+          width: 40px;
+          cursor: pointer;
+
+          // height: 24px;height
+        }
+
+        .totalAmount {
+          position: absolute;
+          top: -10px;
+          left: 50%;
+          display: grid;
+          place-items: center;
+          width: 30px;
+          height: 30px;
+          color: #333333;
+          background-color: #ffffff;
+          border-radius: 50%;
+        }
+
+        .addCartImg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 30px;
+          height: 30px;
+          opacity: 0;
+          transform: translate(-50%, -50%);
+
+          &.animate {
+            animation: addCartImg 1s;
           }
-          100% {
-            opacity: 1;
-            scale: 1;
+
+          @keyframes addCartImg {
+            0% {
+              scale: 3;
+            }
+
+            100% {
+              opacity: 1;
+              scale: 1;
+            }
           }
         }
       }

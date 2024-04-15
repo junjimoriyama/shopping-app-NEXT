@@ -2,7 +2,6 @@
 // import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // import { initialState } from "./types";
 
-
 // const initialState: initialState = {
 //   productList: [],
 //   total: 0
@@ -88,14 +87,13 @@
 
 //     searchProduct: ((state, action) => {
 //       state.productList.forEach(item => {
-//         item.display = item.name.includes(action.payload) 
+//         item.display = item.name.includes(action.payload)
 //       })
 //     })
-    
+
 //   }
 // })
 
 // // reducers
 // export const { addToCart, increaseItem, decreaseItem, deleteItem, totalPrice, searchProduct } = productSlice.actions
 // export default productSlice.reducer
-

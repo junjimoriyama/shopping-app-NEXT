@@ -1,41 +1,41 @@
 .title {
-  font-size: 30px;
   padding: 10px;
+  font-size: 30px;
 }
 
 .auth {
-  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
 
   .authWrap {
-    border: 3px solid #333333;
-    border-radius: 5px;
     padding: 10px;
     background-color: #f3eee4;
+    border: 3px solid #333333;
+    border-radius: 5px;
     box-shadow: 10px 10px 5px -5px #a9a8a8;
 
     .login {
       .heading {
-        text-align: center;
         margin-bottom: 10px;
+        text-align: center;
       }
 
       .loginForm {
         .inputForm {
           display: flex;
           flex-direction: column;
-          align-items: center;
           gap: 10px;
+          align-items: center;
           margin-bottom: 10px;
 
           input {
-            border-radius: 30px;
-            border: 2px solid #333333;
-            padding: 5px 7px;
-            cursor: pointer;
             width: 300px;
+            padding: 5px 7px;
+            border: 2px solid #333333;
+            border-radius: 30px;
+            cursor: pointer;
             transition: .3s;
 
             &:focus {
@@ -52,17 +52,17 @@
           width: 100%;
 
           .loginBtn {
-            color: #ffffff;
-            background-color: #333333;
-            width: 300px;
-            cursor: pointer;
-            transition: .3s;
-            border-radius: 5px;
-            border: none;
-            padding: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 300px;
+            padding: 5px;
+            color: #ffffff;
+            background-color: #333333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .3s;
 
             &:hover {
               color: #000000;
@@ -75,9 +75,9 @@
 
       .cantMatchMsg {
         display: none;
-        text-align: center;
-        padding: 0 0 5px 0;
+        padding: 0 0 5px;
         color: #cd5c5c;
+        text-align: center;
 
         &.isVisible {
           display: flex;
@@ -88,23 +88,22 @@
   }
 
   .or {
-    text-align: center;
     height: 30px;
+    text-align: center;
   }
 
-
   .moveSingUpBtn {
-    color: #ffffff;
-    background-color: #555555;
-    width: 300px;
-    cursor: pointer;
-    transition: .3s;
-    border-radius: 5px;
-    border: none;
-    padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 300px;
+    padding: 5px;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s;
 
     &:hover {
       color: #000000;

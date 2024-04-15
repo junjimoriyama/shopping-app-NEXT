@@ -1,18 +1,19 @@
-@import "var";
+@import 'var';
 
 .product {
-  background-color: #ffffff;
-  color: #333333;
-  padding: 20px;
   margin-top: $header-margin;
+  padding: 20px;
+  color: #333;
+  background-color: #fff;
 
   .totalPrice {
+    padding: 5px;
+    color: #fff;
     text-align: right;
     background-color: #cd5c5c;
-    color: #ffffff;
-    padding: 5px;
     border-radius: 10px;
-    // width: 200px;
+
+    // width: 200px;width
   }
 
   .wrap {
@@ -22,48 +23,51 @@
     select {
       width: 150px;
       height: 30px;
-      padding: 5px;
-      margin-left: auto;
       margin-bottom: 10px;
+      margin-left: auto;
+      padding: 5px;
     }
   }
 
   .productList {
     position: relative;
     top: 50%;
-    height: 50%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
+    height: 50%;
 
     .eachProduct {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      border: 1px solid #000000;
       gap: 5px;
+      align-items: center;
       padding: 5px;
+      border: 1px solid #000;
       border-radius: 5px;
-      box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, .4);
-      transition: .5s;
+      box-shadow: 6px 6px 3px 0 rgb(0 0 0 / 40%);
+      transition: 0.5s;
 
       &.isAnimate {
-        animation: sinkButton .5s forwards;
+        animation: sinkButton 0.5s forwards;
       }
+
       @keyframes sinkButton {
         0% {
-          box-shadow: 7px 7px 3px 0 rgba(0, 0, 0, .4);
-        } 100% {
+          box-shadow: 7px 7px 3px 0 rgb(0 0 0 / 40%);
+        }
+
+        100% {
           box-shadow: none;
         }
       }
 
       .image {
+        display: flex;
+        align-items: center;
         width: 100px;
         height: 100px;
         object-fit: contain;
-        display: flex;
-        align-items: center;
 
         img {
           width: 100px;
@@ -89,30 +93,30 @@
     }
 
     .addToCartBtn {
-      background-color: #333333;
-      color: #ffffff;
-      border-radius: 5px;
       padding: 5px;
-      cursor: pointer;
+      color: #fff;
       text-align: center;
-      transition: .3s;
       background-color: goldenrod;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
 
       &:hover {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
+
     .detailBtn {
-      background-color: #333333;
-      color: #ffffff;
-      border-radius: 5px;
       padding: 5px;
-      cursor: pointer;
+      color: #fff;
       text-align: center;
-      transition: .3s;
+      background-color: #333;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
 
       &:hover {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
   }

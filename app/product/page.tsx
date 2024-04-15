@@ -1,44 +1,61 @@
-"use client";
+'use client';
 
-import React, { ChangeEvent, use, useEffect, useRef, useState } from "react";
-// Next
-import Image from "next/image";
-import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+// react
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+// next
+import Image from 'next/image';
+import Link from 'next/link';
+// redux
 import {
-  fetchSupabaseData,
   addToCart,
   selectedCategory,
   setSelectedCategory,
   setAddCartItemImg,
   searchProduct,
   calcTotalPrice,
-} from "@/lib/features/shopping/slice/ProductSlice";
-import { PagiNation } from "../components/PagiNation";
-import { getSession } from '@/app/auth/Session'
-
+} from '@/lib/features/shopping/slice/ProductSlice';
+// supabase
+import { fetchSupabaseData } from "@/app/utils/supabaseFunk";
+// components
+import { PagiNation } from '../components/PagiNation';
 // css
-import "../../sass/product.scss";
-import { supabase } from "../utils/supabase";
-import { Header } from "../components/Header";
+import '../../sass/product.scss';
 
-
-// Product =============================================================
 const Product = () => {
-  // state
-  // 商品、合計金額、カテゴリー選択
-  const { productList, totalPrice, selectedCategoryValue } =
-    useAppSelector((state) => state.product);
-
-  const { categoryList } = useAppSelector((state) => 
-    state.category)
+  /* state ===========================================*/
+  // 商品
+  const { productList, totalPrice, selectedCategoryValue } = useAppSelector(
+    (state) => state.product,
+  );
+  // カテゴリー
+  const { categoryList } = useAppSelector((state) => state.category);
   // ページ
   const { page } = useAppSelector((state) => state.page);
 
+  /* redux ===========================================*/
+  const dispatch = useAppDispatch();
+
+  /* 変数 ===========================================*/
+  // ページネーションの作成　表示可能商品数
+  const displayedCount = productList.filter((item) => item.display).length;
+  // 商品一覧の画面
+  const productRef = useRef<HTMLUListElement>(null);
+
+  /* hooks ===========================================*/
+  // 表示件数(商品数はdbより非同期で取得されるため全商品数以上の数字を入力)
+  const [perView, setPerView] = useState(1000);
+  // 表示ページ開始
+  const [startPageNum, setStartPageNum] = useState(0);
+  // 表示ページ終了
+  const [endPageNum, setEndPageNum] = useState(perView);
+  // 現在のページ
+  const [activePage, setActivePage] = useState(1);
+  // アニメーションを適用させる商品(idで照合)
+  const [animationItemId, setAnimationItemId] = useState(0);
+
   // 選択されている値(selectedCategoryValueはreduxで管理)
   const [categoryValue, setCategoryValue] = useState(selectedCategoryValue);
-  // dispatch
-  const dispatch = useAppDispatch();
 
   // 初回レンダリング
   useEffect(() => {
@@ -48,19 +65,17 @@ const Product = () => {
     }
   }, []);
 
-  // ページネーションの作成
-  // 表示可能商品数
-  const displayedCount = productList.filter((item) => item.display).length;
+  // totalPriceを更新することでdetail画面に入って戻った時にカートの個数が0にならない。
+  useEffect(() => {
+    dispatch(calcTotalPrice());
+  }, [productList]);
 
-  // 表示件数(商品数はdbより非同期で取得されるため全商品数以上の数字を入力)
-  const [perView, setPerView] = useState(1000);
+  // session取得
+  // useEffect(() => {
+  //   getSession();
+  // }, []);
 
-  // 表示ページ開始
-  const [startPageNum, setStartPageNum] = useState(0);
-  // 表示ページ終了
-  const [endPageNum, setEndPageNum] = useState(perView);
-  // 現在のページ
-  const [activePage, setActivePage] = useState(1);
+  /* 関数 ===========================================*/
 
   // ページ番号クリック
   const paginate = (num: number) => {
@@ -97,7 +112,7 @@ const Product = () => {
     dispatch(setSelectedCategory(e.target.value));
 
     // カテゴリーと表示件数がallなら
-    if (e.target.value === "all" && page === "all") {
+    if (e.target.value === 'all' && page === 'all') {
       setEndPageNum(productList.length);
       setPerView(productList.length);
     } else {
@@ -110,19 +125,17 @@ const Product = () => {
     setActivePage(1);
 
     // 検索文字を空にする
-    dispatch(searchProduct(""));
+    dispatch(searchProduct(''));
   };
 
-  // 商品一覧の画面
-  const productRef = useRef<HTMLUListElement>(null);
-  // クリック
+  // 商品選択クリック一時中止
   const productCantClick = () => {
     if (productRef.current) {
       // カートに商品を表示する1秒間のanimation中はクリックできないようにする
-      productRef.current.style.pointerEvents = "none";
+      productRef.current.style.pointerEvents = 'none';
       const timer = setTimeout(() => {
         if (productRef.current) {
-          productRef.current.style.pointerEvents = "";
+          productRef.current.style.pointerEvents = '';
         }
       }, 1000);
       // クリーンアップ
@@ -130,114 +143,93 @@ const Product = () => {
     }
   };
 
-  // totalPriceを更新することでdetail画面に入って戻った時にカートの個数が0にならない。
-  useEffect(() => {
-    dispatch(calcTotalPrice());
-  }, [productList]);
-
-  // アニメーションを適用させる商品(idで照合)
-  const [animationItemId, setAnimationItemId] = useState(0);
-
   // ボタンを沈ませる
   const sinkButton = (id: number) => {
     // クリックしたボタンに該当する商品を選ぶ
     setAnimationItemId(id);
   };
 
-  // TODO:session取得 ============================================
-  useEffect(() => {
-    getSession()
-  }, []);
-
-
   return (
     <>
-    <div className="product">
+      <div className="product">
+        <div className="wrap">
+          <div className="totalPrice">total ¥{totalPrice}</div>
+        </div>
 
-      <div className="wrap">
-        <div className="totalPrice">total ¥{totalPrice}</div>
-      </div>
+        <PagiNation
+          perView={perView}
+          setPerView={setPerView}
+          displayedCount={displayedCount}
+          paginate={paginate}
+          prevPagination={prevPagination}
+          nextPagination={nextPagination}
+          activePage={activePage}
+          setActivePage={setActivePage}
+          setStartPageNum={setStartPageNum}
+          setEndPageNum={setEndPageNum}
+        />
 
-      <PagiNation
-        perView={perView}
-        setPerView={setPerView}
-        displayedCount={displayedCount}
-        paginate={paginate}
-        prevPagination={prevPagination}
-        nextPagination={nextPagination}
-        activePage={activePage}
-        setActivePage={setActivePage}
-        setStartPageNum={setStartPageNum}
-        setEndPageNum={setEndPageNum}
-      />
+        <div className="wrap">
+          <select
+            name="category"
+            // カテゴリーに合う商品表示
+            onChange={handleCategoryChange}
+            value={categoryValue}
+          >
+            {categoryList.map((category, index) => {
+              return <option key={index}>{category}</option>;
+            })}
+          </select>
+        </div>
 
-      <div className="wrap">
-        <select
-          name="category"
-          // カテゴリーに合う商品表示
-          onChange={handleCategoryChange}
-          value={categoryValue}
-        >
-          {categoryList.map((category, index) => {
-            return <option key={index}>{category}</option>
-          })}
-        </select>
-      </div>
-
-      <ul className="productList" ref={productRef}>
-        {/* display: trueのみ表示 */}
-        {productList
-          .filter((item) => item.display)
-          // pagination
-          .slice(startPageNum, endPageNum)
-          .map((item) => {
-            return (
-              <li
-                className={`eachProduct ${
-                  animationItemId === item.id ? "isAnimate" : ""
-                }`}
-                key={item.id}
-              >
-                <div className="image">
-                  <Image
-                    src={`/images/${item.image}`}
-                    alt=""
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <div className="contents">
-                  <div className="name">{item.name}</div>
-                  <div className="price">¥{item.price}</div>
-                </div>
-
-                {/* cartページへ遷移 */}
-                <button
-                  className="addToCartBtn"
-                  onClick={() => {
-                    dispatch(addToCart(item.id));
-                    dispatch(setAddCartItemImg(item.image));
-                    productCantClick();
-                    sinkButton(item.id);
-                  }}
+        <ul className="productList" ref={productRef}>
+          {/* display: trueのみ表示 */}
+          {productList
+            .filter((item) => item.display)
+            // pagination
+            .slice(startPageNum, endPageNum)
+            .map((item) => {
+              return (
+                <li
+                  className={`eachProduct ${
+                    animationItemId === item.id ? 'isAnimate' : ''
+                  }`}
+                  key={item.id}
                 >
-                  Add to Cart
-                </button>
-                <Link href={`/product/${item.name}`}>
-                  <button className="detailBtn">detail</button>
-                </Link>
-              </li>
-            );
-          })}
-      </ul>
-    </div>
+                  <div className="image">
+                    <Image
+                      src={`/images/${item.image}`}
+                      alt=""
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                  <div className="contents">
+                    <div className="name">{item.name}</div>
+                    <div className="price">¥{item.price}</div>
+                  </div>
+
+                  {/* cartページへ遷移 */}
+                  <button
+                    className="addToCartBtn"
+                    onClick={() => {
+                      dispatch(addToCart(item.id));
+                      dispatch(setAddCartItemImg(item.image));
+                      productCantClick();
+                      sinkButton(item.id);
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                  <Link href={`/product/${item.name}`}>
+                    <button className="detailBtn">detail</button>
+                  </Link>
+                </li>
+              );
+            })}
+        </ul>
+      </div>
     </>
-    // </StoreProvider>
   );
 };
-
 export default Product;
-
-// ページネーションstateはカテゴリーが変わったタイミングで更新
-// ページネーションstate:　ページ数、現在のページ、現在のページ更新関数
-// 全件数などはページ数で渡す

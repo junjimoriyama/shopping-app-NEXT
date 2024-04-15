@@ -1,37 +1,37 @@
-
 // product
 export interface productInitialState {
   // 静的要素
   productList: {
-    id: number,
-    name: string,
-    price: number,
-    image: string,
-    category: string,
-    description: string,
-    amount: number,
-    addedAt: number,
-    display: boolean
-  }[],
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    category: string;
+    description: string;
+    amount: number;
+    addedAt: number;
+    display: boolean;
+  }[];
   // 動的要素
-  selectedImg: string,
-  totalPrice: number
-  selectedCategoryValue: string; 
+  selectedImg: string;
+  totalPrice: number;
+  selectedCategoryValue: string;
   // カゴに入れた数(同じ商品をクリックしてもカートに画像を表示させるため)
-  clickCount: number,
+  clickCount: number;
   // 検索文字
-  searchWord: string
+  searchWord: string;
 }
 
 // cart
 export interface pageInitialState {
-  page: number | string
+  page: number | string;
 }
 
 // category
 export interface CategoryInitialState {
-  categoryList: string[]
+  categoryList: string[];
 }
+
 
 // auth
 // export interface authInitialState {
