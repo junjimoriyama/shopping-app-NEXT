@@ -12,20 +12,53 @@
     text-align: right;
     background-color: #cd5c5c;
     border-radius: 10px;
-
-    // width: 200px;width
   }
 
   .wrap {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .selectedProduct {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 
     select {
       width: 150px;
       height: 30px;
       margin-bottom: 10px;
-      margin-left: auto;
       padding: 5px;
+    }
+  }
+
+  .search {
+    position: relative;
+    display: flex;
+    gap: 5px;
+
+    .searchBox {
+      width: 150px;
+      height: 30px;
+      padding: 5px;
+      border-radius: 5px;
+      transition: .3s;
+
+      &:focus {
+        background-color: #fad0d0;
+        outline: none;
+      }
+    }
+
+    .searchBtn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+      color: #333333;
+      cursor: pointer;
     }
   }
 

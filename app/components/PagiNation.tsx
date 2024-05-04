@@ -1,5 +1,4 @@
 // css
-import { use, useState } from 'react';
 import '../../sass/pagination.scss';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { selectedNumber } from '@/lib/features/shopping/slice/PageSlice';

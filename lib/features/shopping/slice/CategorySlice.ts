@@ -5,7 +5,7 @@ const initialState: CategoryInitialState = {
   categoryList: ['all', 'vegetables', 'meat', 'fish', 'noodle'],
 };
 
-export const CategorySlice = createSlice({
+export const categorySlice = createSlice({
   name: 'category',
   initialState: initialState,
   reducers: {
@@ -25,6 +25,6 @@ export const CategorySlice = createSlice({
   },
 });
 
-export const { addCategory, deleteCategory } = CategorySlice.actions;
+export const { addCategory, deleteCategory } = categorySlice.actions;
 
-export default CategorySlice.reducer;
+export default categorySlice.reducer;

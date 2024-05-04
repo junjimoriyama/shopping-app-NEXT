@@ -1,6 +1,7 @@
 // supabase
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../utils/supabase';
+import { UserData } from '@/lib/features/shopping/slice/types';
 
 // 全てのデータを取得関数
 export const getAllSupabaseData = async () => {
@@ -110,7 +111,7 @@ export const deleteSupabaseData = createAsyncThunk(
 export const getUsersData = async () => {
   const { data: userData, error } = await supabase
     .from('users')
-    .select('username, profileImg')
+    .select('username, userImg')
 
     if(error) {
       throw new Error(error.message)
@@ -119,8 +120,58 @@ export const getUsersData = async () => {
     return userData
 }
 
-// export const getUserId = async () => {
-//   const {data: userId, error} = await supabase
-//   .from('user')
-//   .insert(session)
-// }
+ // ユーザーデータ登録
+  export const addUserSupabaseData = async (
+    {
+    userName,
+    userImg,
+    userId,
+    isAdmin
+  } : UserData
+    ) => {
+    // プロフィールを保存
+    const { error: UserError } = await supabase
+      .from('users')
+      .insert({
+        username: userName,
+        userImg: userImg,
+        userId: userId,
+        isAdmin: isAdmin
+      });
+      // エラー
+    if (UserError) {
+      throw new Error(UserError.message);
+    }
+    
+    // 画像をstorageへ保存
+    // if (UserImg) {
+    //   const file = UserInfo.UserImg;
+    //   const filePath = file?.name
+    //   console.log(filePath)
+    //   if (file && filePath) {
+    //     const { data: imageData, error:imageError } = await supabase.storage
+    //       .from('account')
+    //       .upload(filePath, file);
+    //       console.log(imageData)
+
+    //     if (imageError) {
+    //       throw new Error(imageError.message);
+    //     }
+    //     // return data
+    //   }
+    // }
+  }
+
+  // export const sortPriceSupabaseData = async () => {
+  //   console.log('test')
+  //   const { data, error } = await supabase
+  //   .from('shopping')
+  //   .select('*')
+  //   .order('price', {ascending: true})
+
+  //   if (error) {
+  //     throw new Error(error.message);
+  //   }
+  
+  //   return data;
+  // }

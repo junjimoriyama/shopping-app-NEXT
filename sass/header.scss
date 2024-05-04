@@ -30,40 +30,36 @@ header {
       display: flex;
     }
 
+    .adminBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      background: transparent;
+      color: #ffffff;
+      transition: .3s;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.5;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+
     .wrap {
       display: flex;
       gap: 20px;
       align-items: center;
-
-      .search {
-        position: relative;
-        display: flex;
-        gap: 5px;
-
-        .searchBox {
-          width: 150px;
-          height: 30px;
-          padding: 5px;
-          border-radius: 5px;
-          transition: .3s;
-
-          &:focus {
-            background-color: #fad0d0;
-            outline: none;
-          }
-        }
-
-        .searchBtn {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 30px;
-          height: 30px;
-          padding: 5px;
-          color: #333333;
-          cursor: pointer;
-        }
-      }
 
       .cartIcon {
         position: relative;
@@ -74,8 +70,6 @@ header {
         svg {
           width: 40px;
           cursor: pointer;
-
-          // height: 24px;height
         }
 
         .totalAmount {

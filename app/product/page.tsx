@@ -13,21 +13,23 @@ import {
   setSelectedCategory,
   setAddCartItemImg,
   searchProduct,
-  calcTotalPrice,
+  // calcTotalPrice,
 } from '@/lib/features/shopping/slice/ProductSlice';
 // supabase
-import { fetchSupabaseData } from "@/app/utils/supabaseFunk";
+import { fetchSupabaseData } from '@/app/utils/supabaseFunk';
 // components
 import { PagiNation } from '../components/PagiNation';
 // css
 import '../../sass/product.scss';
+// import { sortProduct } from '../components/function/sort';
+
+import { SearchIcon } from '@/public/icons/HeroIcons';
 
 const Product = () => {
   /* state ===========================================*/
   // 商品
-  const { productList, totalPrice, selectedCategoryValue } = useAppSelector(
-    (state) => state.product,
-  );
+  const { productList, totalPrice, selectedCategoryValue, searchWord } =
+    useAppSelector((state) => state.product);
   // カテゴリー
   const { categoryList } = useAppSelector((state) => state.category);
   // ページ
@@ -59,24 +61,34 @@ const Product = () => {
 
   // 初回レンダリング
   useEffect(() => {
-    // 合計額が0の場合のみ読み込む(基本初回時のみ実行)
-    if (totalPrice <= 0) {
+    // 商品が0であれば
+    if (productList.length === 0) {
+      // 商品の情報をdbより取得
       dispatch(fetchSupabaseData());
     }
   }, []);
 
   // totalPriceを更新することでdetail画面に入って戻った時にカートの個数が0にならない。
-  useEffect(() => {
-    dispatch(calcTotalPrice());
-  }, [productList]);
-
-  // session取得
   // useEffect(() => {
-  //   getSession();
-  // }, []);
+  //   dispatch(calcTotalPrice());
+  // }, [productList]);
 
   /* 関数 ===========================================*/
 
+  // 表示する商品の絞り込み
+  const selectedProductList = () => {
+    return (
+      productList
+        .filter((item) => item.display)
+        .sort((a, b) =>
+          sortPrice === 'low' ? a.price - b.price : b.price - a.price,
+        )
+        // pagination
+        .slice(startPageNum, endPageNum)
+    );
+  };
+
+  // TODO: paginationのページへ移動できるとよい
   // ページ番号クリック
   const paginate = (num: number) => {
     // 最初のページ
@@ -104,17 +116,21 @@ const Product = () => {
 
   // カテゴリー選択
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    // カテゴリーの名前
+    const categoryName = e.target.value;
+    // useStateとreduxで管理している理由はカート画面から戻ってきた時に選ばれていたカテゴリーを表示するため
     // state
-    setCategoryValue(e.target.value);
+    setCategoryValue(categoryName);
     // カテゴリー表示
-    dispatch(selectedCategory(e.target.value));
+    dispatch(selectedCategory(categoryName));
     // カテゴリーの値
-    dispatch(setSelectedCategory(e.target.value));
+    dispatch(setSelectedCategory(categoryName));
 
     // カテゴリーと表示件数がallなら
-    if (e.target.value === 'all' && page === 'all') {
-      setEndPageNum(productList.length);
-      setPerView(productList.length);
+    if (categoryName === 'all' && page === 'all') {
+      const productListLength = productList.length;
+      setEndPageNum(productListLength);
+      setPerView(productListLength);
     } else {
       // それ以外の場合は、現在の表示件数へ
       setEndPageNum(perView);
@@ -123,7 +139,6 @@ const Product = () => {
     setStartPageNum(0);
     // 現在のページを初期化
     setActivePage(1);
-
     // 検索文字を空にする
     dispatch(searchProduct(''));
   };
@@ -149,6 +164,24 @@ const Product = () => {
     setAnimationItemId(id);
   };
 
+  // 金額による並び替え
+  const [sortPrice, setSortPrice] = useState('low');
+
+  /* 関数 ===========================================*/
+  // 検索アイコンの有無
+  const [isSearchIcon, setIsSearchIcon] = useState(true);
+
+  const inputSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 検索ボックスのアイコン表示非表示
+    setIsSearchIcon(e.target.value.length === 0);
+    // 検索文字に当てはまる商品表示
+    dispatch(searchProduct(e.target.value));
+    // 開始ページを初期化
+    setStartPageNum(0);
+    // 現在のページを初期化
+    setActivePage(1);
+  };
+
   return (
     <>
       <div className="product">
@@ -169,7 +202,15 @@ const Product = () => {
           setEndPageNum={setEndPageNum}
         />
 
-        <div className="wrap">
+        <div className="selectedProduct">
+          <select
+            onChange={(e) => {
+              setSortPrice(e.target.value);
+            }}
+          >
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+          </select>
           <select
             name="category"
             // カテゴリーに合う商品表示
@@ -180,53 +221,60 @@ const Product = () => {
               return <option key={index}>{category}</option>;
             })}
           </select>
+
+          <div className="search">
+            <input
+              type="text"
+              className="searchBox"
+              value={searchWord}
+              onChange={(e) => inputSearchValue(e)}
+            />
+            <div className="searchBtn">
+              {isSearchIcon ? <SearchIcon /> : ''}
+            </div>
+          </div>
         </div>
 
         <ul className="productList" ref={productRef}>
-          {/* display: trueのみ表示 */}
-          {productList
-            .filter((item) => item.display)
-            // pagination
-            .slice(startPageNum, endPageNum)
-            .map((item) => {
-              return (
-                <li
-                  className={`eachProduct ${
-                    animationItemId === item.id ? 'isAnimate' : ''
-                  }`}
-                  key={item.id}
-                >
-                  <div className="image">
-                    <Image
-                      src={`/images/${item.image}`}
-                      alt=""
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                  <div className="contents">
-                    <div className="name">{item.name}</div>
-                    <div className="price">¥{item.price}</div>
-                  </div>
+          {selectedProductList().map((item) => {
+            return (
+              <li
+                className={`eachProduct ${
+                  animationItemId === item.id ? 'isAnimate' : ''
+                }`}
+                key={item.id}
+              >
+                <div className="image">
+                  <Image
+                    src={`/images/${item.image}`}
+                    alt=""
+                    width={100}
+                    height={100}
+                  />
+                </div>
+                <div className="contents">
+                  <div className="name">{item.name}</div>
+                  <div className="price">¥{item.price}</div>
+                </div>
 
-                  {/* cartページへ遷移 */}
-                  <button
-                    className="addToCartBtn"
-                    onClick={() => {
-                      dispatch(addToCart(item.id));
-                      dispatch(setAddCartItemImg(item.image));
-                      productCantClick();
-                      sinkButton(item.id);
-                    }}
-                  >
-                    Add to Cart
-                  </button>
-                  <Link href={`/product/${item.name}`}>
-                    <button className="detailBtn">detail</button>
-                  </Link>
-                </li>
-              );
-            })}
+                {/* cartページへ遷移 */}
+                <button
+                  className="addToCartBtn"
+                  onClick={() => {
+                    dispatch(addToCart(item.id));
+                    dispatch(setAddCartItemImg(item.image));
+                    productCantClick();
+                    sinkButton(item.id);
+                  }}
+                >
+                  Add to Cart
+                </button>
+                <Link href={`/product/${item.name}`}>
+                  <button className="detailBtn">detail</button>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>

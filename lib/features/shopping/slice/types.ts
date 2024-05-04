@@ -32,6 +32,13 @@ export interface CategoryInitialState {
   categoryList: string[];
 }
 
+// userData
+export interface UserData  {
+  userName: string;
+  userImg: File | null;
+  userId: string | undefined;
+  isAdmin: boolean
+}
 
 // auth
 // export interface authInitialState {

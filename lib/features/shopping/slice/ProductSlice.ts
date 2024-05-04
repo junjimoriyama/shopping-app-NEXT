@@ -29,6 +29,7 @@ export const productSlice = createSlice({
   },
   reducers: {
     // カートへ追加ボタン押されたら
+    // TODO:カートに商品が入ったタイミングで合計額を計算
     addToCart: (state, action) => {
       const addItem = state.productList.find(
         (item) => item.id === action.payload,
@@ -38,6 +39,11 @@ export const productSlice = createSlice({
         // 時間を取得
         addItem.addedAt = Date.now();
       }
+      let total = 0;
+      state.productList.forEach((item) => {
+        total += item.amount * item.price;
+      });
+      state.totalPrice = total;
     },
     // 商品の数を増やす
     increaseItem: (state, action) => {
@@ -75,13 +81,13 @@ export const productSlice = createSlice({
     },
 
     // 商品の合計額を計算
-    calcTotalPrice: (state) => {
-      let total = 0;
-      state.productList.forEach((item) => {
-        total += item.amount * item.price;
-      });
-      state.totalPrice = total;
-    },
+    // calcTotalPrice: (state) => {
+    //   let total = 0;
+    //   state.productList.forEach((item) => {
+    //     total += item.amount * item.price;
+    //   });
+    //   state.totalPrice = total;
+    // },
     // 文字検索
     searchProduct: (state, action) => {
       // 入力されている文字を取得
@@ -133,7 +139,7 @@ export const {
   increaseItem,
   decreaseItem,
   deleteItem,
-  calcTotalPrice,
+  // calcTotalPrice,
   searchProduct,
   selectedCategory,
   setSelectedCategory,

@@ -4,10 +4,16 @@
 import { useRouter } from 'next/navigation';
 // supabase
 import { supabase } from '../../utils/supabase';
+// css
+import '@/sass/auth/logout.scss';
+import { useEffect } from 'react';
+import { LogoutIcon } from '@/public/icons/HeroIcons';
 
 export function Logout() {
-   /* 変数 ===========================================*/
+  /* 変数 ===========================================*/
   const router = useRouter();
+
+  /* hooks ===========================================*/
 
   /* 関数 ===========================================*/
   const onLogout = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,9 +32,10 @@ export function Logout() {
 
   return (
     <div className="logout">
-      <div className="title"></div>
       <form onSubmit={onLogout}>
-        <button type="submit">logout</button>
+        <button className="logoutBtn" type="submit">
+          <LogoutIcon />
+        </button>
       </form>
     </div>
   );

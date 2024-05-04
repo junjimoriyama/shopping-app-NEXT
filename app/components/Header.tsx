@@ -11,39 +11,41 @@ import { searchProduct } from '@/lib/features/shopping/slice/ProductSlice';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Logout } from '../auth/logout/Logout';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { getSession } from '../auth/session';
+// icon
+import { AdminIcon } from '@/public/icons/HeroIcons';
 
-import { Account } from '@/app/auth/Account';
 
 export const Header = () => {
+  /* state ===========================================*/
+  // 商品
+  const { productList, selectedImg, clickCount, searchWord } = useAppSelector(
+    (state) => state.product,
+  );
+  // ユーザー
+  const { isAdmin, userName } = useAppSelector((state) => state.user);
+  // 管理者
+  // const { adminId } = useAppSelector((state) => state.admin);
+
+  /* redux ===========================================*/
+  const dispatch = useAppDispatch();
+
+  /* 変数 ===========================================*/
+  // パスネーム
+  const pathname = usePathname();
+
+  /* hooks ===========================================*/
   // ヘッダーの表示非表示(ページによる)
   const [isShowHeader, setIsShowHeader] = useState(true);
   // ヘッダー内部のメニュー表示非表示(ページによる)
   const [isShowUserMenu, setIsShowUserMenu] = useState(true);
-
-  // パスネーム
-  const pathname = usePathname();
-
-  useEffect(() => {
-    // ヘッダーの表示非表示
-    setIsShowHeader(!pathname.startsWith('/backOffice'))
-    // ヘッダーメニューの表示非表示
-    setIsShowUserMenu(!(pathname === '/' ||
-    pathname.startsWith('/auth')))
-  }, [pathname]);
-
-  const {
-    productList,
-    selectedImg,
-    selectedCategoryValue,
-    clickCount,
-    searchWord,
-  } = useAppSelector((state) => state.product);
-
   // 検索アイコンの有無
   const [isSearchIcon, setIsSearchIcon] = useState(true);
-
-  const dispatch = useAppDispatch();
+  // カートに入れる画像
+  const [addCartImg, setAddCartImg] = useState('');
+  // カートに入れる画像のアニメーション発火
+  const [isVisible, setIsVisible] = useState(false);
 
   // カートに入っている商品数を定義
   let totalAmount = 0;
@@ -52,11 +54,15 @@ export const Header = () => {
     totalAmount += item.amount;
   });
 
-  // カートに入れる画像
-  const [addCartImg, setAddCartImg] = useState('');
-  // カートに入れる画像のアニメーション発火
-  const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    // ヘッダーの表示非表示
+    setIsShowHeader(!pathname.startsWith('/backOffice'));
+    // ヘッダーメニューの表示非表示
+    setIsShowUserMenu(!(pathname === '/' || pathname.startsWith('/auth')));
+  }, [pathname]);
+
+  // ユーザー画像の配置
   useEffect(() => {
     setAddCartImg(selectedImg);
     setIsVisible(true);
@@ -66,14 +72,6 @@ export const Header = () => {
     return () => clearTimeout(timer);
   }, [selectedImg, clickCount]);
 
-  const inputSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 検索ボックスのアイコン表示非表示
-    setIsSearchIcon(e.target.value.length === 0);
-    // 検索文字に当てはまる商品表示
-    dispatch(searchProduct(e.target.value));
-    // setSearchWord(e.target.value)
-  };
-
   return (
     <header className={`${isShowHeader ? 'isVisible' : ''}`}>
       <div className="title">
@@ -82,27 +80,20 @@ export const Header = () => {
 
       <div className={`userMenu ${isShowUserMenu ? 'isVisible' : ''}`}>
         {/* アカウント */}
-        <Account />
+        {/* <Account /> */}
 
-        <Link href="/backOffice/products/edit">
-          <button>edit</button>
-        </Link>
-
-
+        {/* 管理者idとセッションidが一緒なら */}
+        {isAdmin ? (
+          <div className="adminBtn">
+          <Link href="/backOffice/products/edit">
+            <AdminIcon />
+            {/* <button>edit</button> */}
+          </Link>
+          </div>
+        ) : null }
         <Logout />
 
         <div className="wrap">
-          <div className="search">
-            <input
-              type="text"
-              className="searchBox"
-              value={searchWord}
-              onChange={(e) => inputSearchValue(e)}
-            />
-            <div className="searchBtn">
-              {isSearchIcon ? <SearchIcon /> : ''}
-            </div>
-          </div>
           <Link href="/cart">
             <div className="cartIcon">
               <CartIcon />

@@ -10,12 +10,13 @@ import {
   increaseItem,
   decreaseItem,
   deleteItem,
-  calcTotalPrice,
+  // calcTotalPrice,
 } from '@/lib/features/shopping/slice/ProductSlice';
 // icon
 import { MinusIcon, PlusIcon, TrashIcon } from '@/public/icons/HeroIcons';
 // css
 import '../../sass/cart.scss';
+import { Modal } from '../components/UI/modal';
 
 const Cart = () => {
   /* state ===========================================*/
@@ -41,9 +42,9 @@ const Cart = () => {
   }, [productList]);
 
   // productListに変化があれば
-  useEffect(() => {
-    dispatch(calcTotalPrice());
-  }, [productList]);
+  // useEffect(() => {
+  //   dispatch(calcTotalPrice());
+  // }, [productList]);
 
   return (
     <>
@@ -51,7 +52,7 @@ const Cart = () => {
         <div className="cartTop">
           <p className="title">shoppingCart</p>
           <div className="goShopBtn">
-            <Link href="/">GO SHOP</Link>
+            <Link href="/product">GO SHOP</Link>
           </div>
         </div>
         {/* 合計額が0でなければ */}
@@ -119,28 +120,28 @@ const Cart = () => {
           </div>
         </div>
 
-        <div
-          className={`allDeleteMask ${isAllDeleteModal ? 'isOpen' : ''}`}
-        ></div>
-        <div className={`allDeleteModal ${isAllDeleteModal ? 'isOpen' : ''}`}>
-          <div className="modalWrap">
-            <p>delete everything?</p>
-            <div className="buttonBlock">
-              <div
-                className="yesBtn"
-                onClick={() => {
-                  dispatch(allDeleteItem());
-                  setIsAllDeleteModal(false);
-                }}
-              >
-                Yes
-              </div>
-              <div className="noBtn" onClick={() => setIsAllDeleteModal(false)}>
-                No
-              </div>
+        <Modal
+          isOpen={isAllDeleteModal}
+          onClose={() => setIsAllDeleteModal(false)}
+          className="allDeleteModal"
+        >
+          <p>delete everything?</p>
+
+          <div className="btnBlock">
+            <div
+              className="yesBtn"
+              onClick={() => {
+                dispatch(allDeleteItem());
+                setIsAllDeleteModal(false);
+              }}
+            >
+              Yes
+            </div>
+            <div className="noBtn" onClick={() => setIsAllDeleteModal(false)}>
+              No
             </div>
           </div>
-        </div>
+        </Modal>
       </div>
     </>
   );

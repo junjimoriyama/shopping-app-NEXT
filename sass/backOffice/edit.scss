@@ -1,76 +1,90 @@
 @mixin modalStyle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 300px;
-  height: 200px;
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 10px;
-  transform: translate(-50%, -50%);
-  visibility: hidden;
-  opacity: 0;
-  transition: .2s;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
+  // z-index: 200;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // width: 300px;
+  // height: 200px;
+  // padding: 10px;
+  // background-color: #fff;
+  // border-radius: 10px;
+  // transform: translate(-50%, -50%);
+  // visibility: hidden;
+  // opacity: 0;
+  // transition: .2s;
 
-  &.isOpen {
-    visibility: visible;
-    opacity: 1;
-  }
+  // &.isOpen {
+  //   visibility: visible;
+  //   opacity: 1;
+  // }
+}
+
+$id-width: 30px;
+$name-width: 80px;
+$price-width: 70px;
+$image-width: 80px;
+$category-width: 100px;
+$description-width: 150px;
+
+@mixin listStyle {
+  display: grid;
+  grid-template-columns: $id-width $name-width $price-width $image-width $category-width $description-width 50px 50px;
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
 }
 
 
 
 .update {
   padding: 20px;
+  display: grid;
+  place-items: center;
+  overflow-x: scroll;
 
   .updateProduct {
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     margin-bottom: 20px;
-    overflow-x: scroll;
 
-    .datalist {
+    .field {
+      @include listStyle()
+    }
+
+    .productList {
       .eachProduct {
+        @include listStyle();
 
-        tr {
-          td {
-            &:not(:last-of-type) {
-              padding-right: 5px;
-            }
-          }
-        }
-
-        .id {
-          input {
-            width: 50px;
-          }
+        &.isSelected {
+          background-color: #dfdede;
         }
 
         .name {
           input {
-            width: 100px;
+            width: $name-width;
           }
         }
 
         .price {
           input {
-            width: 60px;
+            width: $price-width;
             text-align: right;
           }
         }
 
         .image {
           display: flex;
-          height: 100%;
-          align-items: stretch;
+          align-items: center;
+          gap: 5px;
+
           img {
-            display: inline-block;
             width: 30px;
             height: 30px;
+            object-fit: contain;
           }
 
           .fileSelectBtn {
@@ -97,6 +111,7 @@
             transition: .3s;
             height: 25px;
             padding: 3px;
+            width: 150px;
 
             &.isExpand {
               height: 100px;
@@ -104,7 +119,7 @@
           }
         }
 
-
+        // 更新ボタン
         ._update {
           .updateBtn {
             align-items: center;
@@ -112,23 +127,23 @@
             color: #ffffff;
             background-color: #333333;
             border-radius: 3px;
+            pointer-events: auto;
             cursor: pointer;
-            
-            &:disabled {
+            transition: .2s;
+
+            &.isDisable {
               opacity: 0.5;
               pointer-events: none;
             }
 
             &:hover {
-              opacity: 0.5;
+              background-color: goldenrod;
             }
           }
         }
 
+        // 削除ボタン
         ._delete {
-          // display: flex;
-          // justify-content: center;
-
           .deleteBtn {
             display: flex;
             align-items: center;
@@ -144,24 +159,22 @@
 
       }
     }
-    
 
+    // 商品追加
     .addProduct {
-      .newId {
-        input {
-          width: 20px;
-        }
-      }
+      margin-top: 20px;
+      @include listStyle();
+      grid-template-columns: $id-width $name-width $price-width $image-width $category-width $description-width 100px;
 
       .newName {
         input {
-          width: 100px;
+          width: $name-width;
         }
       }
 
       .newPrice {
         input {
-          width: 60px;
+          width: $price-width;
           text-align: right;
         }
       }
@@ -170,7 +183,6 @@
         text-align: center;
 
         img {
-          width: 30px;
           height: 30px;
         }
 
@@ -197,12 +209,14 @@
           transition: .3s;
           height: 25px;
           padding: 3px;
+          width: $description-width;
 
           &.isExpand {
             height: 100px;
           }
         }
       }
+
       .add {
         .addBtn {
           align-items: center;
@@ -220,126 +234,4 @@
       }
     }
   }
-
-
-
-  .mask {
-    position: fixed;
-    z-index: 100;
-    background-color: rgb(0 0 0 / 50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: .3s;
-    inset: 0;
-
-    &.isOpen {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-
-  .updateModal {
-    @include modalStyle();
-
-    .modalWrap {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-
-      p {
-        // モーダル消す時に空文字になっても要素固定
-        height: 10px;
-      }
-
-      .closeBtn {
-        padding: 5px;
-        color: #ffffff;
-        background-color: #333333;
-        border: 1px solid #333333;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-    }
-  }
-  
-
-  .deleteConfModal {
-    @include modalStyle();
-
-    .modalWrap {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-
-      .judgeBtn {
-        display: flex;
-        gap: 20px;
-
-        .yesBtn,
-        .noBtn {
-          padding: 5px;
-          width: 50px;
-          border-radius: 5px;
-          color: #ffffff;
-        }
-
-        .yesBtn {
-          background-color: #cd5c5c;
-        }
-
-        .noBtn {
-          background-color: #333;
-        }
-      }
-
-      p {
-        // モーダル消す時に空文字になっても要素固定
-        height: 10px;
-      }
-
-      .closeBtn {
-        padding: 5px;
-        color: #ffffff;
-        background-color: #333333;
-        border: 1px solid #333333;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-    }
-  }
 }
-
-// .updateCategory {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   .categoryList {
-//     display: inline-block;
-//     justify-content: space-between;
-//     margin-right: 10px;
-//     padding: 5px;
-//     border: 1px solid #000000;
-
-//     .eachCategory {
-//       display: flex;
-//       gap: 20px;
-//       justify-content: space-between;
-
-//       .deleteCategory {
-//         cursor: pointer;
-//       }
-//     }
-//   }
-
-//   input,
-//   .addCategoryBtn {
-//     height: 50px;
-//   }
-
-//   .addCategoryBtn {
-//     cursor: pointer;
-//   }
-// }

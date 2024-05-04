@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../utils/supabase';
 // css
 import '@/sass/auth/passwordReset.scss';
+import { Modal } from '@/app/components/UI/modal';
 
 export function ResetPassword() {
   /* 変数 ===========================================*/
@@ -81,14 +82,12 @@ export function ResetPassword() {
         </form>
 
         <div className="changePassword">
-          <div
-            className={`changePasswordMask ${changePassword ? 'isOpen' : ''}`}
-          ></div>
-          <div
-            className={`changePasswordModal ${changePassword ? 'isOpen' : ''}`}
+          <Modal
+          isOpen={changePassword}
+          onClose={() => setChangePassword(false)}
+          className='changePasswordModal'
           >
-            <div className="modalWrap">
-              <p>Check your password setting Email</p>
+             <p>Check your password setting Email</p>
               <div />
               <button
                 className="closeBtn"
@@ -99,8 +98,26 @@ export function ResetPassword() {
               >
                 close
               </button>
-            </div>
-          </div>
+          </Modal>
+          {/* <div
+            className={`changePasswordMask ${changePassword ? 'isOpen' : ''}`}
+          ></div> */}
+          {/* <div
+            className={`changePasswordModal ${changePassword ? 'isOpen' : ''}`}> */}
+            {/* <div className="modalWrap"> */}
+              {/* <p>Check your password setting Email</p>
+              <div />
+              <button
+                className="closeBtn"
+                onClick={() => {
+                  moveLoginPage();
+                  setChangePassword(false);
+                }}
+              >
+                close
+              </button> */}
+            {/* </div> */}
+          {/* </div> */}
         </div>
       </div>
     </div>

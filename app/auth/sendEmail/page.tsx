@@ -8,17 +8,18 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../utils/supabase';
 // css
 import '@/sass/auth/sendEmail.scss';
+import { Modal } from '@/app/components/UI/modal';
 
 const Sendmail = () => {
-   /* 変数 ===========================================*/
-   const router = useRouter();
+  /* 変数 ===========================================*/
+  const router = useRouter();
 
   // メール
   const [email, setEmail] = useState('');
   // メール確認
   const [checkEmail, setCheckEmail] = useState(false);
 
-   /* 関数 ===========================================*/
+  /* 関数 ===========================================*/
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -60,7 +61,28 @@ const Sendmail = () => {
       </form>
 
       <div className="checkEmail">
-        <div className={`checkEmailMask ${checkEmail ? 'isOpen' : ''}`}></div>
+        <Modal
+          isOpen={checkEmail}
+          onClose={() => {
+            moveLoginPage();
+            setCheckEmail(false);
+          }}
+          className="checkEmailModal"
+        >
+          <p>Check your password setting Email</p>
+          <div />
+          <button
+            className="closeBtn"
+            onClick={() => {
+              moveLoginPage();
+              setCheckEmail(false);
+            }}
+          >
+            close
+          </button>
+        </Modal>
+
+        {/* <div className={`checkEmailMask ${checkEmail ? 'isOpen' : ''}`}></div>
         <div className={`checkEmailModal ${checkEmail ? 'isOpen' : ''}`}>
           <div className="modalWrap">
             <p>Check your password setting Email</p>
@@ -75,7 +97,7 @@ const Sendmail = () => {
               close
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

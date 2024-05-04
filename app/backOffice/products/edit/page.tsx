@@ -8,13 +8,13 @@ import {
   fetchSupabaseData,
   addSupabaseData,
   updateSupabaseData,
-  deleteSupabaseData
-  } from '@/app/utils/supabaseFunk'
+  deleteSupabaseData,
+} from '@/app/utils/supabaseFunk';
 // icon
 import { TrashIcon } from '@/public/icons/HeroIcons';
 // css
 import '@/sass/backOffice/edit.scss';
-import { supabase } from '@/app/utils/supabase';
+import { Modal } from '@/app/components/UI/modal';
 
 // 型定義 ===========================================
 
@@ -48,8 +48,6 @@ const list = () => {
   const dispatch = useAppDispatch();
 
   /* hooks ===========================================*/
-  // カテゴリー編集
-  const [inputCategory, setInputCategory] = useState('');
   // 編集したデータを保存(id:{key: value}で保存)
   const [editProductData, setEditProductData] = useState<editProductState>({});
   // 更新成功モーダル
@@ -126,6 +124,8 @@ const list = () => {
     // setIsExpandState(true)
   }, [isExpandState]);
 
+  const [disableIds, setDisableIds] = useState<number[]>([]);
+
   // 商品内容の更新 ----------------------------------
   /**
    * 指定されたIDのオブジェクトの特定のフィールドを更新します。
@@ -149,6 +149,23 @@ const list = () => {
         [field]: value,
       },
     }));
+
+    // 元データ
+    const originalData = productList.find((item) => item.id === id);
+    // 元データとの変更あった場合
+    const isChanged =
+      originalData &&
+      originalData[field as keyof typeof originalData] !== value;
+
+    // updateボタンを有効にする
+    setDisableIds((prev) => {
+      if (isChanged && !prev.includes(id)) {
+        return [...prev, id];
+      } else if (!isChanged) {
+        return prev.filter((currentId) => currentId !== id);
+      }
+      return prev;
+    });
   };
 
   // 更新の実行 ----------------------------------
@@ -200,11 +217,13 @@ const list = () => {
     }
   };
 
-  // onChange(onInput)したら編集前と編集後のデータに差異があればupdateボタンにクラスをつける
+  // 現在選択中の商品(idで管理)
+  const [itemSelectedId, setItemSelectedId] = useState(0);
 
-  const handleUpdateChange = (id: number) => {
-    console.log(id)
-  } 
+  // 選択中のリストに色をつける
+  const handleSelectedItem = (id: number) => {
+    setItemSelectedId(id);
+  };
 
   // TODO:商品の追加 ========================================================
 
@@ -289,263 +308,246 @@ const list = () => {
     <div className="update">
       <div className="title">update Data</div>
       <div className="updateProduct">
-        <table>
-          <thead className="field">
-            <tr>
-              <th className="id">id</th>
-              <th className="name">name</th>
-              <th className="price">price</th>
-              <th className="img">image</th>
-              <th className="category">category</th>
-              <th className="description">description</th>
-              <th className="edit">update</th>
-              <th className="delete">delete</th>
-            </tr>
-          </thead>
-          <tbody className="datalist">
-            {[...productList]
-              // id順
-              .sort((a, b) => a.id - b.id)
-              .map((item) => (
-                <tr className="eachProduct" key={item.id}>
-                  {/* id */}
-                  <td className="id">{item.id}</td>
-                  {/* 名前 */}
-                  <td className="name">
-                    <input
-                      onChange={(e) => {
-                        handleInputChange(item.id, 'name', e.target.value);
-                        handleUpdateChange(item.id)
-                      }}
-                      defaultValue={item.name}
-                    />
-                  </td>
-                  {/* 値段 */}
-                  <td className="price">
-                    <input
-                      type="number"
-                      onChange={(e) =>
-                        handleInputChange(
-                          item.id,
-                          'price',
-                          Number(e.target.value),
-                        )
+        {/* 項目名 */}
+        <ul className="field">
+          <li className="id">id</li>
+          <li className="name">name</li>
+          <li className="price">price</li>
+          <li className="img">image</li>
+          <li className="category">category</li>
+          <li className="description">description</li>
+          <li className="edit">update</li>
+          <li className="delete">delete</li>
+        </ul>
 
-                      }
-                      defaultValue={item.price}
-                      min="0"
-                      step="10"
-                    />
-                  </td>
-                  {/* 画像 */}
-                  <td className="image">
-                    <img src={`/images/${item.image}`} />
-                    <input
-                      type="file"
-                      ref={inputFileRef}
-                      onChange={(e) => {
-                        // 画像をdbで差し替える
-                        handleInputChange(
-                          item.id,
-                          'image',
-                          e.target.files ? e.target.files[0].name : '',
-                        );
-                        // 見た目の画像を変える
-                        handleImageChange(item.id, e);
-                      }}
-                      accept=".png"
-                      style={{
-                        display: 'none',
-                      }}
-                    />
-                    <button
-                      className="fileSelectBtn"
-                      onClick={() => handleFileSelect(item.id)}
-                    >
-                      select
-                    </button>
-                  </td>
-                  {/* カテゴリー */}
-                  <td className="category">
-                    <select
-                      onChange={(e) =>
-                        handleInputChange(item.id, 'category', e.target.value)
-                      }
-                      // 各カテゴリーに合うものを表示
-                      defaultValue={item.category}
-                    >
-                      {categoryList.map((category) => {
-                        return <option key={category}>{category}</option>;
-                      })}
-                    </select>
-                  </td>
-                  {/* 説明 */}
-                  <td className="description">
-                    <textarea
-                      className={`${item.id === isExpandId && isExpandState ? 'isExpand' : ''}`}
-                      onChange={(e) =>
-                        handleInputChange(
-                          item.id,
-                          'description',
-                          e.target.value,
-                        )
-                      }
-                      onClick={() => expandInput(item.id)}
-                      defaultValue={item.description}
-                    />
-                  </td>
-
-                  {/* アップデートボタン */}
-                  <td className="_update">
-                    <button
-                      onClick={() => updateExecution(item.id)}
-                      className="updateBtn"
-                    >
-                      update
-                    </button>
-                  </td>
-
-                  {/* 削除ボタン */}
-                  <td className="_delete">
-                    <button
-                      className="deleteBtn"
-                      onClick={() => {
-                        setIsDeleteConfModalOpen(true);
-                        setDeleteId(item.id);
-                      }}
-                    >
-                      <TrashIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-
-          {/* 間を開ける */}
-          <tbody style={{ height: '20px', lineHeight: '0' }}>
-            <tr
-              style={{ padding: '0', border: 'none', background: 'none' }}
-            ></tr>
-          </tbody>
-
-          {/* データの追加 */}
-          <tbody className="addProduct">
-            <tr>
-              <td className="newId"></td>
-              {/* 新しい名前 */}
-              <td className="newName">
-                <input
-                  onChange={(e) => addNewProduct(e, 'name')}
-                  value={addNewProductData.name}
-                />
-              </td>
-              {/* 新しい値段 */}
-              <td className="newPrice">
-                <input
-                  type="number"
-                  min={0}
-                  step={10}
-                  onChange={(e) => addNewProduct(e, 'price')}
-                  value={addNewProductData.price}
-                />
-              </td>
-              {/* 新しい画像 */}
-              <td className="newImage">
-                {addNewProductData.image && (
-                  <img
-                    src={`/images/${addNewProductData.image}`}
-                    alt="newImage"
+        {/* 商品一覧 */}
+        <ul className="productList">
+          {[...productList]
+            // id順
+            .sort((a, b) => a.id - b.id)
+            .map((item) => (
+              <li
+                className={`eachProduct ${itemSelectedId === item.id ? 'isSelected' : ''}`}
+                onClick={() => handleSelectedItem(item.id)}
+                key={item.id}
+              >
+                {/* id */}
+                <div className="id">{item.id}</div>
+                {/* 名前 */}
+                <div className="name">
+                  <input
+                    onChange={(e) => {
+                      handleInputChange(item.id, 'name', e.target.value);
+                      // handleUpdateChanged(item.id);
+                    }}
+                    defaultValue={item.name}
                   />
-                )}
+                </div>
+                {/* 値段 */}
+                <div className="price">
+                  <input
+                    type="number"
+                    onChange={(e) =>
+                      handleInputChange(
+                        item.id,
+                        'price',
+                        Number(e.target.value),
+                      )
+                    }
+                    defaultValue={item.price}
+                    min="0"
+                    step="10"
+                  />
+                </div>
+                {/* 画像 */}
+                <div className="image">
+                  <img src={`/images/${item.image}`} />
+                  <input
+                    type="file"
+                    ref={inputFileRef}
+                    onChange={(e) => {
+                      // 画像をdbで差し替える
+                      handleInputChange(
+                        item.id,
+                        'image',
+                        e.target.files ? e.target.files[0].name : '',
+                      );
+                      // 見た目の画像を変える
+                      handleImageChange(item.id, e);
+                    }}
+                    accept=".png"
+                    style={{
+                      display: 'none',
+                    }}
+                  />
+                  <button
+                    className="fileSelectBtn"
+                    onClick={() => handleFileSelect(item.id)}
+                  >
+                    select
+                  </button>
+                </div>
+                {/* カテゴリー */}
+                <div className="category">
+                  <select
+                    onChange={(e) =>
+                      handleInputChange(item.id, 'category', e.target.value)
+                    }
+                    // 各カテゴリーに合うものを表示
+                    defaultValue={item.category}
+                  >
+                    {categoryList.map((category) => {
+                      return <option key={category}>{category}</option>;
+                    })}
+                  </select>
+                </div>
+                {/* 説明 */}
+                <div className="description">
+                  <textarea
+                    className={`${item.id === isExpandId && isExpandState ? 'isExpand' : ''}`}
+                    onChange={(e) =>
+                      handleInputChange(item.id, 'description', e.target.value)
+                    }
+                    onClick={() => expandInput(item.id)}
+                    defaultValue={item.description}
+                  />
+                </div>
 
-                <input
-                  type="file"
-                  onChange={(e) => addNewProduct(e, 'image')}
-                  ref={inputNewFileRef}
-                  accept=".png"
-                  style={{
-                    display: 'none',
-                  }}
+                {/* アップデートボタン */}
+                <div className="_update">
+                  <button
+                    className={`updateBtn ${disableIds.includes(item.id) ? '' : 'isDisable'}`}
+                    onClick={() => updateExecution(item.id)}
+                  >
+                    update
+                  </button>
+                </div>
+
+                {/* 削除ボタン */}
+                <div className="_delete">
+                  <button
+                    className="deleteBtn"
+                    onClick={() => {
+                      setIsDeleteConfModalOpen(true);
+                      setDeleteId(item.id);
+                    }}
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
+              </li>
+            ))}
+          <li className="addProduct">
+            <div className="newId"></div>
+            <div className="newName">
+              <input
+                onChange={(e) => addNewProduct(e, 'name')}
+                value={addNewProductData.name}
+              />
+            </div>
+            {/* 新しい値段 */}
+            <div className="newPrice">
+              <input
+                type="number"
+                min={0}
+                step={10}
+                onChange={(e) => addNewProduct(e, 'price')}
+                value={addNewProductData.price}
+              />
+            </div>
+            {/* 新しい画像 */}
+            <div className="newImage">
+              {addNewProductData.image && (
+                <img
+                  src={`/images/${addNewProductData.image}`}
+                  alt="newImage"
                 />
-                <button
-                  className="newFileSelectBtn"
-                  onClick={() => handleAddNewImage()}
-                >
-                  select
-                </button>
-              </td>
-              {/* 新しいカテゴリー */}
-              <td className="newCategory">
-                <select
-                  onChange={(e) => addNewProduct(e, 'category')}
-                  value={addNewProductData.category}
-                >
-                  {categoryList.map((category) => {
-                    return <option key={category}>{category}</option>;
-                  })}
-                </select>
-              </td>
+              )}
 
-              {/* 新しい説明 */}
-              <td className="newDescription">
-                <textarea
-                  className={`${isNewExpandState ? 'isExpand' : ''}`}
-                  onChange={(e) => addNewProduct(e, 'description')}
-                  onClick={() => setIsNewExpandState(!isNewExpandState)}
-                  value={addNewProductData.description}
-                ></textarea>
-              </td>
-              <td className="add" colSpan={2}>
-                <button
-                  className="addBtn"
-                  onClick={() => setIsAddConfModalOpen(true)}
-                >
-                  add
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <input
+                type="file"
+                onChange={(e) => addNewProduct(e, 'image')}
+                ref={inputNewFileRef}
+                accept=".png"
+                style={{
+                  display: 'none',
+                }}
+              />
+              <button
+                className="newFileSelectBtn"
+                onClick={() => handleAddNewImage()}
+              >
+                select
+              </button>
+            </div>
+            {/* 新しいカテゴリー */}
+            <div className="newCategory">
+              <select
+                onChange={(e) => addNewProduct(e, 'category')}
+                value={addNewProductData.category}
+              >
+                {categoryList.map((category) => {
+                  return <option key={category}>{category}</option>;
+                })}
+              </select>
+            </div>
+
+            {/* 新しい説明 */}
+            <div className="newDescription">
+              <textarea
+                className={`${isNewExpandState ? 'isExpand' : ''}`}
+                onChange={(e) => addNewProduct(e, 'description')}
+                onClick={() => setIsNewExpandState(!isNewExpandState)}
+                value={addNewProductData.description}
+              ></textarea>
+            </div>
+            <div className="add">
+              <button
+                className="addBtn"
+                onClick={() => setIsAddConfModalOpen(true)}
+              >
+                add
+              </button>
+            </div>
+          </li>
+        </ul>
       </div>
 
       {/* モーダル */}
-      {/* 更新 */}
-      <div
-        className={`mask ${isUpdateModalOpen ? 'isOpen' : ''}`}
-        onClick={() => {
-          setIsUpdateModalOpen(false);
-          setIsSuccess(false);
-        }}
-      ></div>
-      <div className={`updateModal ${isSuccess ? 'isOpen' : ''}`}>
-        {/* 成功 */}
-        <div className="modalWrap">
+      <>
+        <Modal
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setIsDeleteConfModalOpen(false);
+            setDeleteId(0);
+            setIsSuccess(false);
+            setIsFailure(false);
+          }}
+          className="updateModal"
+        >
+
           {isSuccess ? <p>success</p> : <p></p>}
           {isFailure ? <p>failure</p> : <p></p>}
-
           <button
             className="closeBtn"
             onClick={() => {
               setIsUpdateModalOpen(false);
               setIsSuccess(false);
+              setIsFailure(false);
             }}
           >
             close
           </button>
-        </div>
-      </div>
+        </Modal>
 
-      {/* 追加 */}
-      <div
-        className={`mask ${isAddConfModalOpen ? 'isOpen' : ''}`}
-        onClick={() => {
-          setIsAddConfModalOpen(false);
-        }}
-      ></div>
-      <div className={`deleteConfModal ${isAddConfModalOpen ? 'isOpen' : ''}`}>
-        <div className="modalWrap">
+        {/* 追加 */}
+        <Modal
+          isOpen={isAddConfModalOpen}
+          onClose={() => setIsAddConfModalOpen(false)}
+          className="deleteConfModal"
+        >
           <p>Realy add?</p>
-          <div className="judgeBtn">
+          <div className="btnBlock">
             <button className="yesBtn" onClick={addExecution}>
               Yes
             </button>
@@ -558,23 +560,19 @@ const list = () => {
               No
             </button>
           </div>
-        </div>
-      </div>
+        </Modal>
 
-      {/* 削除 */}
-      <div
-        className={`mask ${isDeleteConfModalOpen ? 'isOpen' : ''}`}
-        onClick={() => {
-          setIsDeleteConfModalOpen(false);
-          setDeleteId(0);
-        }}
-      ></div>
-      <div
-        className={`deleteConfModal ${isDeleteConfModalOpen ? 'isOpen' : ''}`}
-      >
-        <div className="modalWrap">
+        {/* 削除 */}
+        <Modal
+          isOpen={isDeleteConfModalOpen}
+          onClose={() => {
+            setIsDeleteConfModalOpen(false);
+            setDeleteId(0);
+          }}
+          className="deleteConfModal"
+        >
           <p>Realy delete?</p>
-          <div className="judgeBtn">
+          <div className="btnBlock">
             <button
               className="yesBtn"
               onClick={() => deleteExecution(deleteId)}
@@ -591,8 +589,8 @@ const list = () => {
               No
             </button>
           </div>
-        </div>
-      </div>
+        </Modal>
+      </>
     </div>
   );
 };
@@ -641,3 +639,21 @@ export default list;
   </button>
 </div>; */
 }
+
+// const originalData = productList.find((item) => item.id === id);
+
+// const isChanged =
+//   originalData &&
+//   originalData[field as keyof typeof originalData] !== value;
+
+// setDisableIds((prev) => {
+//   // 変更あってidも追加された
+//   if (isChanged && !prev.includes(id)) {
+//     return [...prev, id];
+//     // もし変化がなければclickした商品idを配列より除外する
+//   } else if(!isChanged) {
+//     // 今のidから変更がなかったidを除外する。
+//     return prev.filter(currentId => currentId !== id)
+//   }
+//   return prev;
+// });

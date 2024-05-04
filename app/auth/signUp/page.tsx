@@ -4,13 +4,16 @@ import { supabase } from '../../utils/supabase';
 
 // css
 import '@/sass/auth/signUp.scss';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConf, setPasswordConf] = useState('');
-
   const [errorMsg, setErrorMsg] = useState('');
+
+  const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,19 +23,15 @@ const SignUp = () => {
         email: email,
         password: password,
         options: {
-          emailRedirectTo: `${window.location.origin + '/completedSignUp'}`,
+          emailRedirectTo: `${window.location.origin + '/auth/createAccount'}`,
         },
       });
-      console.log(error);
+      const identities = data.user?.identities;
       if (error?.message.includes('Email rate limit exceeded')) {
         setErrorMsg('Email rate limit exceeded');
-      }
-
-      // 登録されているメールアドレスの場合、空の配列が返ってくる。
-      // 分岐の条件見直し data.user?がない場合も想定
-      const identities = data.user?.identities;
-      console.log(data.user);
-      if (identities?.length === 0) {
+      } else if (data.user) { // ユーザー登録が成功した場合
+        router.push('/auth/createAccount?userId=' + data.user?.id); // ここでリダイレクト
+      } else if (identities?.length === 0) {
         setErrorMsg('already a registered user');
       }
     } catch (error) {

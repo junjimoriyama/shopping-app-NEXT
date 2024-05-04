@@ -13,8 +13,13 @@ import '@/sass/auth/login.scss';
 // import { getSession } from 'next-auth/react';
 import { getSession } from '../session';
 import { getUsersData } from '@/app/utils/supabaseFunk';
+import { useAppDispatch } from '@/lib/hooks';
+import { getUserAdmin, getUserId, getUserImage, getUserName } from '@/lib/features/shopping/slice/userSlice';
 
 function Login() {
+
+   /* redux ===========================================*/
+   const dispatch = useAppDispatch();
   /* 変数 ===========================================*/
   const router = useRouter();
 
@@ -31,8 +36,28 @@ function Login() {
   const [cantMatchMsg, setCantMatchMsg] = useState(false);
 
   /* 関数 ===========================================*/
+
+  // // メールアドレスの重複チェック関数
+  // const checkUserExists = async (email: string) => {
+  //   const { data } = await supabase
+  //     .from('users')
+  //     .select('email')
+  //     .eq('email', email)
+  //     .single();
+
+  //   // データベースにデータがあるか確認
+  //   return data ? true : false;
+  // };
+
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // メールアドレスの重複チェック
+    // const userExists = await checkUserExists(email);
+    // if (userExists) {
+    //   alert('このメールアドレスは既に使用されています。');
+    //   return;
+    // }
 
     try {
       const { error: loginError } = await supabase.auth.signInWithPassword({
@@ -42,6 +67,33 @@ function Login() {
       if (loginError) {
         throw loginError;
       }
+
+      // reduxの状態に値を入れる
+      // session取得
+      const session = await getSession();
+
+      const getUserState = async () => {
+        const userId = session.session?.user.id;
+        // もしsessionのidあればusersテーブルのidとする
+        if (userId) {
+          const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('userId', userId)
+          .single();
+
+          if (error) {
+            console.log(error.message);
+          }
+          // 名前、画像、ID、adminの更新
+          dispatch(getUserName(data.username))
+          dispatch(getUserImage(data.userImg))
+          dispatch(getUserId(data.userId))
+          dispatch(getUserAdmin(data.isAdmin))
+        }
+      };
+      getUserState();
+
       // email,password不一致メッセージ非表示
       setCantMatchMsg(false);
       router.push('/product');
@@ -51,75 +103,27 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      // session取得
-      const session = await getSession();
-      console.log(session.session?.user.id);
-
-      const getUserId = async () => {
-      const {error} =  await supabase
-          .from('users')
-          .insert([{'auth_id': session.session?.user.id}]);
-
-          if(error) {
-            console.log(error.message)
-          }
-      };
-      getUserId()
-    })();
-  }, []);
-
-  // profileImg
-  // profileImg
-
-  // const fetchSession = async() => {
-  //   const session = await getSession();
-  //   console.log('session', session)
-  // }
-  // fetchSession()
-
-  // sessionの情報を元にuserDataをとってくる
-
   // useEffect(() => {
-
-  //   const fetchSession = async() => {
+  //   (async () => {
+  //     // session取得
   //     const session = await getSession();
-  //     console.log('session', session)
-  //   }
-  //   fetchSession()
-  //     // const usersData = await getUsersData();
 
-  //     // const loggedInUserId = '';
-  //     // const fetchUserData = async () => {
-  //     //   //  const { data: { user }, error } = await supabase.auth.getUser()
-  //     //   const { data, error } = await supabase
-  //     //     .from('users')
-  //     //     .select('username, profileImg')
-  //     //     .eq('auth_id', loggedInUserId);
-  //     //   console.log(data);
+  //     const getUserId = async () => {
+  //       const userId = session.session?.user.id;
+  //       // もしsessionのidあればusersテーブルのidとする
+  //       if (userId) {
+  //         const { error } = await supabase
+  //           .from('users')
+  //           .insert([{ userId: session.session?.user.id }]);
 
-  //     //   if (error) {
-  //     //     console.log(error.message);
-  //     //   }
-  //     // };
-  //     // fetchUserData();
-  //     // sessionの情報を元にuserDataをとってくる
-
+  //         if (error) {
+  //           console.log(error.message);
+  //         }
+  //       }
+  //     };
+  //     getUserId();
+  //   })();
   // }, []);
-  // サインアップボタン押したらsupabaseへリクエスト投げる
-  // ユーザー作るとログイン状態になる
-  // session利用可能(中にidがある)
-  // sessionの中からidを取り出す。そのままユーザーテーブルに新しくレコードを作る
-  // ユーザーテーブルにuidを予め用意。そこにsessionから取り出したuidをセット
-  // 同じuidで共通する情報を取得(ユーザーテーブルからuidを元に検索する)
-  //  const {data, error} = await supabase
-  //  .from('users')
-  //  .select('*')
-  //  .eq('user_id', loggedInUserId)
-  //
-  // もしダメならセッションのidだけでもreduxで管理しても良い
-  // ログアウト時に削除する
 
   return (
     <>
