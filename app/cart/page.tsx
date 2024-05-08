@@ -10,7 +10,7 @@ import {
   increaseItem,
   decreaseItem,
   deleteItem,
-  // calcTotalPrice,
+  calcTotalPrice,
 } from '@/lib/features/shopping/slice/ProductSlice';
 // icon
 import { MinusIcon, PlusIcon, TrashIcon } from '@/public/icons/HeroIcons';
@@ -42,9 +42,9 @@ const Cart = () => {
   }, [productList]);
 
   // productListに変化があれば
-  // useEffect(() => {
-  //   dispatch(calcTotalPrice());
-  // }, [productList]);
+  useEffect(() => {
+    dispatch(calcTotalPrice());
+  }, [productList]);
 
   return (
     <>

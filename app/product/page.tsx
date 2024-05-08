@@ -13,7 +13,7 @@ import {
   setSelectedCategory,
   setAddCartItemImg,
   searchProduct,
-  // calcTotalPrice,
+  calcTotalPrice,
 } from '@/lib/features/shopping/slice/ProductSlice';
 // supabase
 import { fetchSupabaseData } from '@/app/utils/supabaseFunk';
@@ -69,9 +69,9 @@ const Product = () => {
   }, []);
 
   // totalPriceを更新することでdetail画面に入って戻った時にカートの個数が0にならない。
-  // useEffect(() => {
-  //   dispatch(calcTotalPrice());
-  // }, [productList]);
+  useEffect(() => {
+    dispatch(calcTotalPrice());
+  }, [productList]);
 
   /* 関数 ===========================================*/
 

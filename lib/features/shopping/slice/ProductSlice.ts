@@ -59,7 +59,6 @@ export const productSlice = createSlice({
       const currentItem = state.productList.find(
         (item) => item.id === action.payload,
       );
-      console.log(currentItem)
       if (currentItem) {
         if (currentItem.amount > 1) {
           currentItem.amount = currentItem?.amount - 1;
@@ -81,13 +80,14 @@ export const productSlice = createSlice({
     },
 
     // 商品の合計額を計算
-    // calcTotalPrice: (state) => {
-    //   let total = 0;
-    //   state.productList.forEach((item) => {
-    //     total += item.amount * item.price;
-    //   });
-    //   state.totalPrice = total;
-    // },
+    calcTotalPrice: (state) => {
+      console.log('test')
+      let total = 0;
+      state.productList.forEach((item) => {
+        total += item.amount * item.price;
+      });
+      state.totalPrice = total;
+    },
     // 文字検索
     searchProduct: (state, action) => {
       // 入力されている文字を取得
@@ -123,12 +123,12 @@ export const productSlice = createSlice({
       state.clickCount = state.clickCount + 1;
     },
 
-    appearanceImageChange: (state, action) => {
-      const currentItem = state.productList.find(item => item.id === action.payload.id)
-      console.log(action.payload.fileImage)
-      if (currentItem)
-        currentItem.image = action.payload.fileImage
-    }
+    // appearanceImageChange: (state, action) => {
+    //   const currentItem = state.productList.find(item => item.id === action.payload.id)
+    //   console.log(action.payload.fileImage)
+    //   if (currentItem)
+    //     currentItem.image = action.payload.fileImage
+    // }
   },
 });
 
@@ -139,20 +139,11 @@ export const {
   increaseItem,
   decreaseItem,
   deleteItem,
-  // calcTotalPrice,
+  calcTotalPrice,
   searchProduct,
   selectedCategory,
   setSelectedCategory,
   setAddCartItemImg,
-  appearanceImageChange,
+  // appearanceImageChange,
 } = productSlice.actions;
 export default productSlice.reducer;
-
-// 例えば手打ちでsetEndPageNum(16)と入力したら全ての商品が1ページに表示されるが、ページネーションはsetEndPageNumが4と仮定されたものとし
-
-// const handleFileChange = (id: number) => ( e: React.ChangeEvent<HTMLInputElement>) => {
-//   if(e.target.files) {
-//     const fileName = e.target.files[0].name;
-//     dispatch(imageChange({id, fileName}))
-//   }
-// }
