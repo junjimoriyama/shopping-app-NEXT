@@ -1,10 +1,9 @@
-import { productSlice } from './features/shopping/slice/ProductSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import productReducer from './features/shopping/slice/ProductSlice';
 import pageReducer from './features/shopping/slice/PageSlice';
 import categoryReducer from './features/shopping/slice/CategorySlice';
 import userReducer from './features/shopping/slice/userSlice'
-import adminReduce from './features/shopping/slice/adminSlice'
+// import adminReduce from './features/shopping/slice/adminSlice'
 
 export const makeStore = () => {
   return configureStore({
@@ -13,7 +12,7 @@ export const makeStore = () => {
       page: pageReducer,
       category: categoryReducer,
       user: userReducer,
-      admin: adminReduce
+      // admin: adminReduce
     },
   });
 };

@@ -21,9 +21,12 @@ import { fetchSupabaseData } from '@/app/utils/supabaseFunk';
 import { PagiNation } from '../components/PagiNation';
 // css
 import '../../sass/product.scss';
-// import { sortProduct } from '../components/function/sort';
+
+// FramerMotion 
+import { motion } from 'framer-motion'; 
 
 import { SearchIcon } from '@/public/icons/HeroIcons';
+import { ScreenTransition } from '../components/animation/ScreenTransition';
 
 const Product = () => {
   /* state ===========================================*/
@@ -55,7 +58,6 @@ const Product = () => {
   const [activePage, setActivePage] = useState(1);
   // アニメーションを適用させる商品(idで照合)
   const [animationItemId, setAnimationItemId] = useState(0);
-
   // 選択されている値(selectedCategoryValueはreduxで管理)
   const [categoryValue, setCategoryValue] = useState(selectedCategoryValue);
 
@@ -87,7 +89,6 @@ const Product = () => {
         .slice(startPageNum, endPageNum)
     );
   };
-
   // TODO: paginationのページへ移動できるとよい
   // ページ番号クリック
   const paginate = (num: number) => {
@@ -184,7 +185,12 @@ const Product = () => {
 
   return (
     <>
-      <div className="product">
+      <ScreenTransition>
+      <motion.div className="product"
+      initial ={{ opacity: 0 }}
+      animate={{opacity: 1}}
+      transition={{ duration: 1, delay: 0.5 }}
+      >
         <div className="wrap">
           <div className="totalPrice">total ¥{totalPrice}</div>
         </div>
@@ -276,7 +282,8 @@ const Product = () => {
             );
           })}
         </ul>
-      </div>
+      </motion.div>
+      </ScreenTransition>
     </>
   );
 };

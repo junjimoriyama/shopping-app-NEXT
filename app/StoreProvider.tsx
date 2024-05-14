@@ -2,7 +2,6 @@
 import { useRef } from 'react';
 import { Provider } from 'react-redux';
 import { makeStore, AppStore } from '../lib/store';
-import { addToCart } from '@/lib/features/shopping/slice/ProductSlice';
 
 // useRefを介してstoreのインスタンスを保持
 // childrenはprops.childrenでReact.ReactNode型とすることでReactがレンダリングできるあらゆる内容（数値、文字列、JSX、子要素など）を含む
@@ -16,7 +15,6 @@ export default function StoreProvider({
 
   if (!storeRef.current) {
     storeRef.current = makeStore();
-    // storeRef.current.dispatch(addToCart(state))
   }
   //
   return <Provider store={storeRef.current}>{children}</Provider>;

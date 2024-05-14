@@ -54,7 +54,6 @@ export const Header = () => {
     totalAmount += item.amount;
   });
 
-
   useEffect(() => {
     // ヘッダーの表示非表示
     setIsShowHeader(!pathname.startsWith('/backOffice'));
@@ -79,8 +78,6 @@ export const Header = () => {
       </div>
 
       <div className={`userMenu ${isShowUserMenu ? 'isVisible' : ''}`}>
-        {/* アカウント */}
-        {/* <Account /> */}
 
         {/* 管理者idとセッションidが一緒なら */}
         {isAdmin ? (

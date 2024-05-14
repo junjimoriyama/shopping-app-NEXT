@@ -161,17 +161,3 @@ export const getUsersData = async () => {
     //   }
     // }
   }
-
-  // export const sortPriceSupabaseData = async () => {
-  //   console.log('test')
-  //   const { data, error } = await supabase
-  //   .from('shopping')
-  //   .select('*')
-  //   .order('price', {ascending: true})
-
-  //   if (error) {
-  //     throw new Error(error.message);
-  //   }
-  
-  //   return data;
-  // }

@@ -29,12 +29,15 @@ export const PagiNation: React.FC<PageNationProps> = ({
   setStartPageNum,
   setEndPageNum,
 }) => {
-  // state
+
+  /* state ===========================================*/
+  // 商品
   const { productList } = useAppSelector((state) => state.product);
 
-  // ページ数の計算
+  /* 変数 ===========================================*/
   const totalPage = Math.ceil(displayedCount / perView);
 
+  /* redux ===========================================*/
   const dispatch = useAppDispatch();
 
   return (
@@ -62,7 +65,6 @@ export const PagiNation: React.FC<PageNationProps> = ({
           ▶︎
         </button>
       </div>
-
       <div className="PerPageSelect">
         <p className="displayedNum">NUMBER</p>
         <select
@@ -92,11 +94,9 @@ export const PagiNation: React.FC<PageNationProps> = ({
               setEndPageNum(newPer);
               // アクティブページを1に戻す
               setActivePage(1);
-              // setTotalPage( displayedCount / newPer)
             }
           }}
         >
-          {/* <option value="all"></option> */}
           <option value="all">all</option>
           <option value="2">2</option>
           <option value="4">4</option>

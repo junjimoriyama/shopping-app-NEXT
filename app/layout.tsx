@@ -1,4 +1,3 @@
-
 // next
 import type { Metadata } from 'next';
 // redux
@@ -9,6 +8,7 @@ import { Header } from './components/Header';
 import { Inter } from 'next/font/google';
 // css
 import './globals.css';
+import { ScreenTransition } from './components/animation/ScreenTransition';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,8 +26,8 @@ export default function RootLayout({
     <html lang="ja">
       <body className={inter.className}>
         <StoreProvider>
-          <Header />
-          {children}
+            <Header />
+            {children}
         </StoreProvider>
       </body>
     </html>
