@@ -10,13 +10,15 @@
 
 ## 概要
 
-スーパーマーケットに置いてある様な食材を購入します。
+スーパーマーケットで販売されているような食材を購入できます。
+買い物カゴに食材を追加・削除すると、合計金額が自動で計算されます。
 
-食材を買い物カゴに入れたり、削除をすると合計金額が自動計算されます。
+また、以下の機能を備えています。
 
-ページネーション、並べ替え（金額）、食材の種類により検索機能も付いています。
-
-バックオフィス機能として食材の追加や金額の修正、削除などのCRUD操作も可能です。
+ページネーション（一覧を複数ページに分割）
+並べ替え機能（価格順など）
+検索機能（食材の種類でフィルタリング）
+さらに、バックオフィス機能として、食材の追加・価格の修正・削除などのCRUD操作が可能です。
 
 <br>
 
@@ -30,8 +32,3 @@
 | **Design**         | Illustrator         |
 | **Editor**         | VSCode              |
 <img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,react,next,redux,vercel,supabase,illustrator,svg,vscode,github" />
-
-<br>
-
-## アーキテクチャ
-<img width="1125" alt="github_アーキテクチャ" src="https://github.com/user-attachments/assets/fef61b0c-ab6b-45fb-b4fd-30d7efd675a2" />
