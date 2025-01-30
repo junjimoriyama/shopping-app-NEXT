@@ -4,7 +4,7 @@
 
 ### URL: https://shopping-app-next-ten.vercel.app/
 
-## 仮装ECサイト
+## 🛒 仮装ECサイト
 
 <br>
 
