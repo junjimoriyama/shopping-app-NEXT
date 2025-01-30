@@ -11,8 +11,11 @@
 ## 概要
 
 スーパーマーケットに置いてある様な食材を購入します。
+
 食材を買い物カゴに入れたり、削除をすると合計金額が自動計算されます。
+
 ページネーション、並べ替え（金額）、食材の種類により検索機能も付いています。
+
 バックオフィス機能として食材の追加や金額の修正、削除などのCRUD操作も可能です。
 
 <br>
@@ -21,12 +24,12 @@
 | カテゴリー　　            | 技術　　　　　　　　　　　　　　　　　　　　　　　　　　   |
 |---------------------|------------------- |
 | **Frontend**       | Next.js(14.1.3), TypeScript  |
-**State Management**　| Redux              |
+| **State Management**　| Redux              |
 | **Infrastructure** | Vercel     　　　　　 |
 | **Database**       | supabase            |
 | **Design**         | Illustrator         |
 | **Editor**         | VSCode              |
-<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,react,next,rails,heroku,vercel,illustrator,svg,vscode,github" />
+<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,react,next,redux,vercel,supabase,illustrator,vscode,github" />
 
 <br>
 
