@@ -46,17 +46,22 @@ const Cart = () => {
     dispatch(calcTotalPrice());
   }, [productList]);
 
+  // スクロール状態を無効化
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <>
       <div className="cart">
         <div className="cartTop">
-          <p className="title">shoppingCart</p>
+          <p className="title">買い物カゴ</p>
           <div className="goShopBtn">
-            <Link href="/product">GO SHOP</Link>
+            <Link href="/product">商品一覧に戻る</Link>
           </div>
         </div>
         {/* 合計額が0でなければ */}
-        {totalPrice ? '' : <p className="cartEmpty">Cart is empty.</p>}
+        {totalPrice ? '' : <p className="cartEmpty">カートは空です。</p>}
         <ul className="cartList">
           {productList
             // amountが1以上の商品のみ表示
@@ -109,13 +114,13 @@ const Cart = () => {
         <hr />
 
         <div className="cartBottom">
-          <div className="total">total: ￥{totalPrice}</div>
+          <div className="total">合計: ￥{totalPrice}</div>
           <div className={`allDelete ${isVisible ? 'isVisible' : ''}`}>
             <button
               className="allDeleteBtn"
               onClick={() => setIsAllDeleteModal(true)}
             >
-              all delete
+              すべて削除
             </button>
           </div>
         </div>
@@ -125,7 +130,7 @@ const Cart = () => {
           onClose={() => setIsAllDeleteModal(false)}
           className="allDeleteModal"
         >
-          <p>delete everything?</p>
+          <p>削除してもいいですか?</p>
 
           <div className="btnBlock">
             <div
@@ -135,10 +140,10 @@ const Cart = () => {
                 setIsAllDeleteModal(false);
               }}
             >
-              Yes
+              はい
             </div>
             <div className="noBtn" onClick={() => setIsAllDeleteModal(false)}>
-              No
+              いいえ
             </div>
           </div>
         </Modal>

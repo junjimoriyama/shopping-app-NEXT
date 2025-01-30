@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { CategoryInitialState } from './types';
 
 const initialState: CategoryInitialState = {
-  categoryList: ['all', 'vegetables', 'meat', 'fish', 'noodle'],
+  categoryList: ['すべて', '野菜', '肉', '魚', '麺類'],
 };
 
 export const categorySlice = createSlice({

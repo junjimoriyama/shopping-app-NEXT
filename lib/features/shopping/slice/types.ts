@@ -40,8 +40,3 @@ export interface UserData  {
   isAdmin: boolean
 }
 
-// auth
-// export interface authInitialState {
-//   signIn: boolean,
-//   login: boolean
-// }

@@ -10,9 +10,9 @@ import { CartIcon, SearchIcon } from '@/public/icons/HeroIcons';
 import { searchProduct } from '@/lib/features/shopping/slice/ProductSlice';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Logout } from '../auth/logout/Logout';
+// import { Logout } from '../auth/logout/Logout';
 import { usePathname } from 'next/navigation';
-import { getSession } from '../auth/session';
+// import { getSession } from '../auth/session';
 // icon
 import { AdminIcon } from '@/public/icons/HeroIcons';
 
@@ -80,15 +80,15 @@ export const Header = () => {
       <div className={`userMenu ${isShowUserMenu ? 'isVisible' : ''}`}>
 
         {/* 管理者idとセッションidが一緒なら */}
-        {isAdmin ? (
+        {/* {isAdmin ? ( */}
           <div className="adminBtn">
           <Link href="/backOffice/products/edit">
             <AdminIcon />
             {/* <button>edit</button> */}
           </Link>
           </div>
-        ) : null }
-        <Logout />
+        {/* ) : null } */}
+        {/* <Logout /> */}
 
         <div className="wrap">
           <Link href="/cart">

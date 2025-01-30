@@ -21,6 +21,11 @@ export default function Page({ params }: PageProps) {
   /* state ===========================================*/
   const { productList } = useAppSelector((state) => state.product);
 
+useEffect(() => {
+  // デコードする
+  console.log(params.id)
+}, [])
+
   /* hooks ===========================================*/
   const router = useRouter();
 
@@ -30,7 +35,7 @@ export default function Page({ params }: PageProps) {
     router.push('/');
   });
 
-  // スクロール状態を無効化()
+  // スクロール状態を無効化
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -40,13 +45,11 @@ export default function Page({ params }: PageProps) {
       <div className="detail">
         <ul>
           {productList
-            .filter((item) => item.display && item.name === params.id)
+            .filter((item) => item.name === decodeURIComponent (params.id))
             .map((item) => {
               return (
                 <li className="detailItem" key={item.id}>
-                  {/* <div className="img"> */}
                   <img src={`/images/${item.image}`} />
-                  {/* </div> */}
                   <p className="name">{item.name}</p>
                   <p className="description"> {item.description}</p>
                   <p className="price">¥{item.price}</p>
@@ -55,7 +58,7 @@ export default function Page({ params }: PageProps) {
             })}
         </ul>
         <Link href="/product">
-          <button className="backBtn">back</button>
+          <button className="backBtn">戻る</button>
         </Link>
       </div>
     </>

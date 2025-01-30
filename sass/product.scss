@@ -70,6 +70,18 @@
     gap: 30px;
     height: 50%;
 
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 575px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 414px) {
+      grid-template-columns: 1fr;
+    }
+
     .eachProduct {
       display: flex;
       flex-direction: column;
@@ -80,6 +92,10 @@
       border-radius: 5px;
       box-shadow: 6px 6px 3px 0 rgb(0 0 0 / 40%);
       transition: 0.5s;
+
+      &:hover {
+        opacity: .5;
+      }
 
       &.isAnimate {
         animation: sinkButton 0.5s forwards;
@@ -98,59 +114,64 @@
       .image {
         display: flex;
         align-items: center;
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         object-fit: contain;
 
         img {
-          width: 100px;
-          height: 100px;
+          width: 50px;
+          height: 50px;
           object-fit: contain;
         }
       }
 
       .contents {
         display: flex;
-        flex-direction: column;
+        // flex-direction: column;
         gap: 10px;
 
         .name {
-          font-size: 16px;
+          font-size: 14px;
         }
 
         .price {
-          font-size: 16px;
+          font-size: 14px;
           text-align: center;
         }
       }
     }
 
-    .addToCartBtn {
-      padding: 5px;
-      color: #fff;
-      text-align: center;
-      background-color: goldenrod;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        opacity: 0.5;
+    .productBtn {
+      display: flex;
+      gap: 10px;
+      .addToCartBtn {
+        padding: 5px;
+        color: #fff;
+        text-align: center;
+        background-color: goldenrod;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+  
+        &:hover {
+          opacity: 0.5;
+        }
+      }
+  
+      .detailBtn {
+        padding: 5px;
+        color: #fff;
+        text-align: center;
+        background-color: #333;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+  
+        &:hover {
+          opacity: 0.5;
+        }
       }
     }
 
-    .detailBtn {
-      padding: 5px;
-      color: #fff;
-      text-align: center;
-      background-color: #333;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        opacity: 0.5;
-      }
-    }
   }
 }

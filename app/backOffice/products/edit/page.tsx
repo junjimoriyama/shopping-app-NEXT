@@ -1,22 +1,24 @@
-'use client';
+"use client";
 // react
-import { useState, useEffect, useRef, ChangeEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { useState, useEffect, useRef, ChangeEvent } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 // redux
-import { appearanceImageChange } from '@/lib/features/shopping/slice/ProductSlice';
+import { appearanceImageChange } from "@/lib/features/shopping/slice/ProductSlice";
 import {
   fetchSupabaseData,
   addSupabaseData,
   updateSupabaseData,
   deleteSupabaseData,
-} from '@/app/utils/supabaseFunk';
+} from "@/app/utils/supabaseFunk";
 // icon
-import { TrashIcon } from '@/public/icons/HeroIcons';
+import { TrashIcon } from "@/public/icons/HeroIcons";
 // css
-import '@/sass/backOffice/edit.scss';
-import { Modal } from '@/app/components/UI/modal';
+import "@/sass/backOffice/edit.scss";
+import { Modal } from "@/app/components/UI/modal";
+import Link from "next/link";
 
 // 型定義 ===========================================
+
 
 // 更新用商品
 interface editProductState {
@@ -58,6 +60,8 @@ const list = () => {
   const [isFailure, setIsFailure] = useState(false);
   // 追加確認モーダル
   const [isAddConfModalOpen, setIsAddConfModalOpen] = useState(false);
+  // 未入力モーダル
+  const [isNotEnteredModalOpen, setIsNotEnteredModalOpen] = useState(false);
   // 削除確認モーダル
   const [isDeleteConfModalOpen, setIsDeleteConfModalOpen] = useState(false);
   // 削除番号
@@ -87,7 +91,7 @@ const list = () => {
   // 見た目の画像を変える
   const handleImageChange = (
     id: number,
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files) {
       // idをhandleFileSelectのidへ(ここでのidは商品数最後の数字になる)
@@ -136,7 +140,7 @@ const list = () => {
   const handleInputChange = (
     id: number,
     field: string,
-    value: string | number,
+    value: string | number
   ) => {
     // 前のeditProductDataの状態をコピーして展開
     // オブジェクトID(メモリアドレス)を変わらないと更新の認識をされない。
@@ -174,7 +178,7 @@ const list = () => {
     const originalData = productList.find((item) => item.id === id);
     // 元データなければ
     if (!originalData) {
-      throw new Error('error');
+      throw new Error("error");
     }
     // 編集されているデータを優先
     const upDateProductData = {
@@ -189,7 +193,7 @@ const list = () => {
     type ProductData = keyof typeof editData;
     // 変化があれば
     const hasChange = (
-      ['name', 'price', 'image', 'category', 'description'] as ProductData[]
+      ["name", "price", "image", "category", "description"] as ProductData[]
     ).some((field) => {
       // 編集のデータがundefinedではなく、元データが更新されていれば
       return (
@@ -237,17 +241,17 @@ const list = () => {
 
   // 追加する商品データ初期値
   const initialNewProductData = {
-    name: '',
+    name: "",
     price: 0,
-    image: '',
-    category: '',
-    description: '',
+    image: "",
+    category: "",
+    description: "",
   };
 
   // 追加商品の準備　----------------------------------
   // 追加する商品データ状態
   const [addNewProductData, setAddNewProductData] = useState<newProductData>(
-    initialNewProductData,
+    initialNewProductData
   );
 
   // 商品追加の処理
@@ -256,14 +260,14 @@ const list = () => {
       | ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>
       | ChangeEvent<HTMLTextAreaElement>,
-    field: string,
+    field: string
   ) => {
     let value: string | number;
-    if (field === 'image') {
+    if (field === "image") {
       // 型定義(変数化する必要あり)
       const input = e.target as HTMLInputElement;
-      value = input.files?.[0].name ?? '';
-    } else if (field === 'price') {
+      value = input.files?.[0].name ?? "";
+    } else if (field === "price") {
       value = Number(e.target.value);
     } else {
       value = e.target.value;
@@ -277,6 +281,18 @@ const list = () => {
 
   // 追加の実行 ----------------------------------
   const addExecution = () => {
+    // 入力欄が空又は0であればtrue
+    const isNotEntered = Object.values(addNewProduct).some(
+      (value) => value === "" || value === 1
+    );
+
+    if (isNotEntered) {
+      setIsAddConfModalOpen(false);
+      setIsNotEnteredModalOpen(true);
+      // 追加処理を中止
+      return;
+    }
+
     dispatch(addSupabaseData({ addNewProductData })).then(() => {
       // データを取得して画面に反映
       dispatch(fetchSupabaseData());
@@ -306,18 +322,18 @@ const list = () => {
 
   return (
     <div className="update">
-      <div className="title">update Data</div>
+      <div className="title">更新データ</div>
       <div className="updateProduct">
         {/* 項目名 */}
         <ul className="field">
-          <li className="id">id</li>
-          <li className="name">name</li>
-          <li className="price">price</li>
-          <li className="img">image</li>
-          <li className="category">category</li>
-          <li className="description">description</li>
-          <li className="edit">update</li>
-          <li className="delete">delete</li>
+          <li className="id">ID</li>
+          <li className="name">名前</li>
+          <li className="price">値段</li>
+          <li className="img">画像</li>
+          <li className="category">分類</li>
+          <li className="description">説明</li>
+          <li className="edit">更新</li>
+          <li className="delete">削除</li>
         </ul>
 
         {/* 商品一覧 */}
@@ -327,7 +343,7 @@ const list = () => {
             .sort((a, b) => a.id - b.id)
             .map((item) => (
               <li
-                className={`eachProduct ${itemSelectedId === item.id ? 'isSelected' : ''}`}
+                className={`eachProduct ${itemSelectedId === item.id ? "isSelected" : ""}`}
                 onClick={() => handleSelectedItem(item.id)}
                 key={item.id}
               >
@@ -337,7 +353,7 @@ const list = () => {
                 <div className="name">
                   <input
                     onChange={(e) => {
-                      handleInputChange(item.id, 'name', e.target.value);
+                      handleInputChange(item.id, "name", e.target.value);
                       // handleUpdateChanged(item.id);
                     }}
                     defaultValue={item.name}
@@ -350,8 +366,8 @@ const list = () => {
                     onChange={(e) =>
                       handleInputChange(
                         item.id,
-                        'price',
-                        Number(e.target.value),
+                        "price",
+                        Number(e.target.value)
                       )
                     }
                     defaultValue={item.price}
@@ -369,29 +385,29 @@ const list = () => {
                       // 画像をdbで差し替える
                       handleInputChange(
                         item.id,
-                        'image',
-                        e.target.files ? e.target.files[0].name : '',
+                        "image",
+                        e.target.files ? e.target.files[0].name : ""
                       );
                       // 見た目の画像を変える
                       handleImageChange(item.id, e);
                     }}
                     accept=".png"
                     style={{
-                      display: 'none',
+                      display: "none",
                     }}
                   />
                   <button
                     className="fileSelectBtn"
                     onClick={() => handleFileSelect(item.id)}
                   >
-                    select
+                    選ぶ
                   </button>
                 </div>
                 {/* カテゴリー */}
                 <div className="category">
                   <select
                     onChange={(e) =>
-                      handleInputChange(item.id, 'category', e.target.value)
+                      handleInputChange(item.id, "category", e.target.value)
                     }
                     // 各カテゴリーに合うものを表示
                     defaultValue={item.category}
@@ -404,9 +420,9 @@ const list = () => {
                 {/* 説明 */}
                 <div className="description">
                   <textarea
-                    className={`${item.id === isExpandId && isExpandState ? 'isExpand' : ''}`}
+                    className={`${item.id === isExpandId && isExpandState ? "isExpand" : ""}`}
                     onChange={(e) =>
-                      handleInputChange(item.id, 'description', e.target.value)
+                      handleInputChange(item.id, "description", e.target.value)
                     }
                     onClick={() => expandInput(item.id)}
                     defaultValue={item.description}
@@ -416,10 +432,10 @@ const list = () => {
                 {/* アップデートボタン */}
                 <div className="_update">
                   <button
-                    className={`updateBtn ${disableIds.includes(item.id) ? '' : 'isDisable'}`}
+                    className={`updateBtn ${disableIds.includes(item.id) ? "" : "isDisable"}`}
                     onClick={() => updateExecution(item.id)}
                   >
-                    update
+                    更新
                   </button>
                 </div>
 
@@ -441,7 +457,7 @@ const list = () => {
             <div className="newId"></div>
             <div className="newName">
               <input
-                onChange={(e) => addNewProduct(e, 'name')}
+                onChange={(e) => addNewProduct(e, "name")}
                 value={addNewProductData.name}
               />
             </div>
@@ -451,7 +467,7 @@ const list = () => {
                 type="number"
                 min={0}
                 step={10}
-                onChange={(e) => addNewProduct(e, 'price')}
+                onChange={(e) => addNewProduct(e, "price")}
                 value={addNewProductData.price}
               />
             </div>
@@ -466,24 +482,24 @@ const list = () => {
 
               <input
                 type="file"
-                onChange={(e) => addNewProduct(e, 'image')}
+                onChange={(e) => addNewProduct(e, "image")}
                 ref={inputNewFileRef}
                 accept=".png"
                 style={{
-                  display: 'none',
+                  display: "none",
                 }}
               />
               <button
                 className="newFileSelectBtn"
                 onClick={() => handleAddNewImage()}
               >
-                select
+                選ぶ
               </button>
             </div>
             {/* 新しいカテゴリー */}
             <div className="newCategory">
               <select
-                onChange={(e) => addNewProduct(e, 'category')}
+                onChange={(e) => addNewProduct(e, "category")}
                 value={addNewProductData.category}
               >
                 {categoryList.map((category) => {
@@ -495,8 +511,8 @@ const list = () => {
             {/* 新しい説明 */}
             <div className="newDescription">
               <textarea
-                className={`${isNewExpandState ? 'isExpand' : ''}`}
-                onChange={(e) => addNewProduct(e, 'description')}
+                className={`${isNewExpandState ? "isExpand" : ""}`}
+                onChange={(e) => addNewProduct(e, "description")}
                 onClick={() => setIsNewExpandState(!isNewExpandState)}
                 value={addNewProductData.description}
               ></textarea>
@@ -506,8 +522,13 @@ const list = () => {
                 className="addBtn"
                 onClick={() => setIsAddConfModalOpen(true)}
               >
-                add
+                追加する
               </button>
+            </div>
+            <div className="goShop">
+              <div className="goShopBtn">
+                <Link href="/product">商品一覧に戻る</Link>
+              </div>
             </div>
           </li>
         </ul>
@@ -525,9 +546,8 @@ const list = () => {
           }}
           className="updateModal"
         >
-
-          {isSuccess ? <p>success</p> : <p></p>}
-          {isFailure ? <p>failure</p> : <p></p>}
+          {isSuccess ? <p>変更しました</p> : <p></p>}
+          {isFailure ? <p>変更できませんでした</p> : <p></p>}
           <button
             className="closeBtn"
             onClick={() => {
@@ -536,7 +556,26 @@ const list = () => {
               setIsFailure(false);
             }}
           >
-            close
+            閉じる
+          </button>
+        </Modal>
+
+        {/* 未入力 */}
+        <Modal
+          isOpen={isNotEnteredModalOpen}
+          onClose={() => {
+            setIsNotEnteredModalOpen(false);
+          }}
+          className="notEnteredModal"
+        >
+          未入力の部分があります。
+          <button
+            className="closeBtn"
+            onClick={() => {
+              setIsNotEnteredModalOpen(false);
+            }}
+          >
+            閉じる
           </button>
         </Modal>
 
@@ -546,10 +585,10 @@ const list = () => {
           onClose={() => setIsAddConfModalOpen(false)}
           className="deleteConfModal"
         >
-          <p>Realy add?</p>
+          <p>商品を加えますか?</p>
           <div className="btnBlock">
             <button className="yesBtn" onClick={addExecution}>
-              Yes
+              はい
             </button>
             <button
               className="noBtn"
@@ -557,7 +596,7 @@ const list = () => {
                 setIsAddConfModalOpen(false);
               }}
             >
-              No
+              いいえ
             </button>
           </div>
         </Modal>
@@ -571,13 +610,13 @@ const list = () => {
           }}
           className="deleteConfModal"
         >
-          <p>Realy delete?</p>
+          <p>削除しますか?</p>
           <div className="btnBlock">
             <button
               className="yesBtn"
               onClick={() => deleteExecution(deleteId)}
             >
-              Yes
+              はい
             </button>
             <button
               className="noBtn"
@@ -586,7 +625,7 @@ const list = () => {
                 setDeleteId(0);
               }}
             >
-              No
+              いいえ
             </button>
           </div>
         </Modal>
@@ -596,64 +635,3 @@ const list = () => {
 };
 
 export default list;
-
-// // 新規作成画面へのリンク
-
-// // 更新画面へのリンク、削除
-// /*
-// *dbからshoppingテーブルから全情報を取得
-// * postgrestの使い方(?)、restAPIの理解必要
-// * 画面のHTML、CSSを作成
-// * dbから返ってきたjsonデータを画面に表示
-// * backoffice用の認証は必要
-// */
-
-// 編集ボタン
-// edit.tsxにリンク　formタグ用意（新規なら空、該当商品編集なら予め商品情報入る）
-// 更新ボタン押すと一覧画面を表示(場合によって)
-
-{
-  /* <div className="updateCategory">
-  <div className="categoryList">
-    {categoryList.map((category) => {
-      return (
-        <li className="eachCategory" key={category}>
-          {category}
-          <div
-            className="deleteCategory"
-            onClick={() => dispatch(deleteCategory(category))}
-          >
-            ×
-          </div>
-        </li>
-      );
-    })}
-  </div>
-  <input
-    type="text"
-    onChange={(e) => setInputCategory(e.target.value)}
-    placeholder="addCategory"
-  />
-  <button className="addCategoryBtn" onClick={() => handleAddCategory()}>
-    Add
-  </button>
-</div>; */
-}
-
-// const originalData = productList.find((item) => item.id === id);
-
-// const isChanged =
-//   originalData &&
-//   originalData[field as keyof typeof originalData] !== value;
-
-// setDisableIds((prev) => {
-//   // 変更あってidも追加された
-//   if (isChanged && !prev.includes(id)) {
-//     return [...prev, id];
-//     // もし変化がなければclickした商品idを配列より除外する
-//   } else if(!isChanged) {
-//     // 今のidから変更がなかったidを除外する。
-//     return prev.filter(currentId => currentId !== id)
-//   }
-//   return prev;
-// });

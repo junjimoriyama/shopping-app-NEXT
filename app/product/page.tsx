@@ -89,7 +89,7 @@ const Product = () => {
         .slice(startPageNum, endPageNum)
     );
   };
-  // TODO: paginationのページへ移動できるとよい
+  // paginationのページへ移動できるとよい
   // ページ番号クリック
   const paginate = (num: number) => {
     // 最初のページ
@@ -127,8 +127,8 @@ const Product = () => {
     // カテゴリーの値
     dispatch(setSelectedCategory(categoryName));
 
-    // カテゴリーと表示件数がallなら
-    if (categoryName === 'all' && page === 'all') {
+    // カテゴリーと表示件数がすべてなら
+    if (categoryName === 'すべて' && page === 'すべて') {
       const productListLength = productList.length;
       setEndPageNum(productListLength);
       setPerView(productListLength);
@@ -192,7 +192,7 @@ const Product = () => {
       transition={{ duration: 1, delay: 0.5 }}
       >
         <div className="wrap">
-          <div className="totalPrice">total ¥{totalPrice}</div>
+          <div className="totalPrice">合計 ¥{totalPrice}</div>
         </div>
 
         <PagiNation
@@ -214,8 +214,8 @@ const Product = () => {
               setSortPrice(e.target.value);
             }}
           >
-            <option value="low">Low to High</option>
-            <option value="high">High to Low</option>
+            <option value="low">安い順</option>
+            <option value="high">高い順</option>
           </select>
           <select
             name="category"
@@ -263,6 +263,7 @@ const Product = () => {
                   <div className="price">¥{item.price}</div>
                 </div>
 
+                <div className="productBtn">
                 {/* cartページへ遷移 */}
                 <button
                   className="addToCartBtn"
@@ -273,11 +274,13 @@ const Product = () => {
                     sinkButton(item.id);
                   }}
                 >
-                  Add to Cart
+                  買い物カゴへ
                 </button>
                 <Link href={`/product/${item.name}`}>
-                  <button className="detailBtn">detail</button>
+                  <button className="detailBtn">詳細</button>
                 </Link>
+
+                </div>
               </li>
             );
           })}

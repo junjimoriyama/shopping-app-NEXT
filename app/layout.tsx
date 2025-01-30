@@ -8,7 +8,6 @@ import { Header } from './components/Header';
 import { Inter } from 'next/font/google';
 // css
 import './globals.css';
-import { ScreenTransition } from './components/animation/ScreenTransition';
 
 const inter = Inter({ subsets: ['latin'] });
 

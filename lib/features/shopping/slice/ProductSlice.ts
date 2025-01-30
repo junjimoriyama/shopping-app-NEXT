@@ -1,14 +1,13 @@
-import { supabase } from '@/app/utils/supabase';
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { productInitialState } from './types';
-import { fetchSupabaseData, getAllSupabaseData } from '@/app/utils/supabaseFunk';
+import { fetchSupabaseData } from '@/app/utils/supabaseFunk';
 
 const initialState: productInitialState = {
   productList: [],
   selectedImg: '',
   totalPrice: 0,
-  selectedCategoryValue: 'all',
+  selectedCategoryValue: 'すべて',
   // カゴに入れた数(同じ商品をクリックしてもカートに画像を表示させるため)
   clickCount: 0,
   // 検索文字
@@ -28,8 +27,7 @@ export const productSlice = createSlice({
     });
   },
   reducers: {
-    // カートへ追加ボタン押されたら
-    // TODO:カートに商品が入ったタイミングで合計額を計算
+    // カートに商品が入ったタイミングで合計額を計算
     addToCart: (state, action) => {
       const addItem = state.productList.find(
         (item) => item.id === action.payload,
@@ -81,7 +79,6 @@ export const productSlice = createSlice({
 
     // 商品の合計額を計算
     calcTotalPrice: (state) => {
-      console.log('test')
       let total = 0;
       state.productList.forEach((item) => {
         total += item.amount * item.price;
@@ -93,9 +90,9 @@ export const productSlice = createSlice({
       // 入力されている文字を取得
       state.searchWord = action.payload;
       state.productList.forEach((item) => {
-        // カテゴリーがall又は合致するか判定、その後検索文字による判定
+        // カテゴリーがすべて又は合致するか判定、その後検索文字による判定
         item.display =
-          (state.selectedCategoryValue === 'all' ||
+          (state.selectedCategoryValue === 'すべて' ||
             state.selectedCategoryValue === item.category) &&
           (!action.payload || item.name.includes(action.payload));
       });
@@ -106,7 +103,7 @@ export const productSlice = createSlice({
         return {
           ...item,
           display:
-            action.payload === 'all' || item.category === action.payload
+            action.payload === 'すべて' || item.category === action.payload
               ? true
               : false,
         };
@@ -123,12 +120,12 @@ export const productSlice = createSlice({
       state.clickCount = state.clickCount + 1;
     },
 
-    // appearanceImageChange: (state, action) => {
-    //   const currentItem = state.productList.find(item => item.id === action.payload.id)
-    //   console.log(action.payload.fileImage)
-    //   if (currentItem)
-    //     currentItem.image = action.payload.fileImage
-    // }
+    // 特定の商品アイテムの画像を変更
+    appearanceImageChange: (state, action) => {
+      const currentItem = state.productList.find(item => item.id === action.payload.id)
+      if (currentItem)
+        currentItem.image = action.payload.fileImage
+    }
   },
 });
 
@@ -144,6 +141,6 @@ export const {
   selectedCategory,
   setSelectedCategory,
   setAddCartItemImg,
-  // appearanceImageChange,
+  appearanceImageChange,
 } = productSlice.actions;
 export default productSlice.reducer;

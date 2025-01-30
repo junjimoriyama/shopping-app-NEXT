@@ -66,14 +66,14 @@ export const PagiNation: React.FC<PageNationProps> = ({
         </button>
       </div>
       <div className="PerPageSelect">
-        <p className="displayedNum">NUMBER</p>
+        <p className="displayedNum">表示件数</p>
         <select
           name=""
           id=""
           onChange={(e) => {
             dispatch(selectedNumber(e.target.value));
             const selectedValue = e.target.value;
-            if (selectedValue === 'all') {
+            if (selectedValue === 'すべて') {
               // 全ての商品表示
               setPerView(displayedCount),
                 // 表示ページ開始
@@ -97,7 +97,7 @@ export const PagiNation: React.FC<PageNationProps> = ({
             }
           }}
         >
-          <option value="all">all</option>
+          <option value="すべて">すべて</option>
           <option value="2">2</option>
           <option value="4">4</option>
           <option value="6">6</option>
