@@ -93,10 +93,6 @@
       box-shadow: 6px 6px 3px 0 rgb(0 0 0 / 40%);
       transition: 0.5s;
 
-      &:hover {
-        opacity: .5;
-      }
-
       &.isAnimate {
         animation: sinkButton 0.5s forwards;
       }
